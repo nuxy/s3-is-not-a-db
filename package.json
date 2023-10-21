@@ -1,0 +1,27 @@
+{
+  "name": "s3-is-not-a-db",
+  "version": "0.0.1",
+  "description": "Simple interface to using Amazon S3 as a database.",
+  "main": "index.js",
+  "scripts": {
+    "gendoc": "jsdoc -d doc -r src",
+    "lint": "eslint src test",
+    "test": "mocha --require test/mocha.env.js 'test/**/*.js'"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "latest",
+    "chai": "latest",
+    "chai-as-promised": "latest",
+    "eslint": "latest",
+    "jsdoc": "latest",
+    "mocha": "latest",
+    "sinon": "latest",
+    "swagger-jsdoc": "latest"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
