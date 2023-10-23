@@ -19,8 +19,6 @@ class Client {
    */
   constructor(bucket, region) {
     this.#handle = null;
-    this.#bucket = null;
-    this.#region = null;
 
     this.#init(bucket, region);
   }
