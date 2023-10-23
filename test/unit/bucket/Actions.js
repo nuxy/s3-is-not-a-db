@@ -9,33 +9,26 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 // Load modules.
-const Client = require(`${PACKAGE_ROOT}/src/Client`);
+const Actions = require(`${PACKAGE_ROOT}/src/bucket/Actions`);
+const Client  = require(`${PACKAGE_ROOT}/src/Client`);
 
 afterEach(() => {
   AWSMock.restore();
 });
 
-describe('Client', function() {
-  const bucket = 's3-is-not-a-db';
-  const region = 'us-east-1';
-  const client = new Client(bucket, region);
+describe('BucketActions', function() {
+  const bucket     = 's3-is-not-a-db';
+  const region     = 'us-east-1';
+  const prefixPath = '/path/to/file/';
+  const actions    = new Actions(bucket, region);
+
+  actions.prefixPath = prefixPath;
 
   describe('Getters/Setters', function() {
-    describe('bucket', function() {
-      client.bucket = bucket;
-
+    describe('prefixPath', function() {
       it('should return value', function() {
-        expect(client.bucket).to.be.an('string');
-        expect(client.bucket).to.equal(bucket);
-      });
-    });
-
-    describe('region', function() {
-      client.region = region;
-
-      it('should return value', function() {
-        expect(client.region).to.be.an('string');
-        expect(client.region).to.equal(region);
+        expect(actions.prefixPath).to.be.an('string');
+        expect(actions.prefixPath).to.equal(prefixPath);
       });
     });
   });
@@ -47,15 +40,9 @@ describe('Client', function() {
           callback(null, Promise.resolve({Body: {Contents: [{Key: 'foo'}]}}));
         });
 
-        const result = client.list('/path/to/file');
+        const result = actions.list();
 
         return expect(result).to.eventually.include('foo');
-      });
-
-      it('should resolve Error', function() {
-        const result = client.list('');
-
-        return expect(result).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
       });
     });
 
@@ -69,15 +56,9 @@ describe('Client', function() {
           callback(null, Promise.resolve(true));
         });
 
-        const result = client.delete('/path/to/file.ext');
+        const result = actions.delete('file.ext');
 
         return expect(result).to.eventually.be.undefined;
-      });
-
-      it('should resolve Error', function() {
-        const result = client.delete('');
-
-        return expect(result).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
       });
     });
 
@@ -91,15 +72,9 @@ describe('Client', function() {
           callback(null, Promise.resolve(true));
         });
 
-        const result = client.fetch('/path/to/file.ext');
+        const result = actions.fetch('file.ext');
 
         return expect(result).to.eventually.be.equal('data');
-      });
-
-      it('should resolve Error', function() {
-        const result = client.fetch('');
-
-        return expect(result).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
       });
     });
 
@@ -109,15 +84,9 @@ describe('Client', function() {
           callback(null, Promise.resolve());
         });
 
-        const result = client.write('/path/to/file.ext', '', 'plain/text');
+        const result = actions.write('file.ext', 'plain/text');
 
         return expect(result).to.eventually.be.undefined;
-      });
-
-      it('should resolve Error', function() {
-        const result = client.write('', '', '');
-
-        return expect(result).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
       });
     });
 
@@ -147,15 +116,9 @@ describe('Client', function() {
           callback(null, Promise.resolve());
         });
 
-        const result = client.rename('/path/to/file1.ext', '/path/to/file2.ext');
+        const result = actions.rename('file1.ext', 'file2.ext');
 
         return expect(result).to.eventually.be.undefined;
-      });
-
-      it('should resolve Error', function() {
-        const result = client.rename('', '');
-
-        return expect(result).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
       });
     });
 
@@ -165,15 +128,9 @@ describe('Client', function() {
           callback(null, Promise.resolve(true));
         });
 
-        const result = client.exists('/path/to/file.ext');
+        const result = actions.exists('file.ext');
 
         return expect(result).to.eventually.be.true;
-      });
-
-      it('should resolve Error', function() {
-        const result = client.exists('');
-
-        return expect(result).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
       });
     });
   });
