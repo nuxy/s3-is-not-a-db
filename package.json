@@ -6,7 +6,8 @@
   "scripts": {
     "gendoc": "jsdoc -d doc -r src",
     "lint": "eslint src test",
-    "test": "mocha --require test/mocha.env.js 'test/**/*.js'"
+    "test": "nyc mocha --require test/mocha.env.js 'test/**/*.js'",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
     "uuid": "^9.0.0"
@@ -15,9 +16,11 @@
     "aws-sdk-mock": "latest",
     "chai": "latest",
     "chai-as-promised": "latest",
+    "coveralls": "latest",
     "eslint": "latest",
     "jsdoc": "latest",
     "mocha": "latest",
+    "nyc": "latest",
     "sinon": "latest",
     "swagger-jsdoc": "latest"
   },
