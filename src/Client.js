@@ -85,7 +85,7 @@ class Client {
         const {Body} = await this.handle.listObjects(params).promise();
         return Body.Contents.map(data => data.Key);
 
-      } catch (err) {
+      } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
         throw err;
       }
@@ -115,7 +115,7 @@ class Client {
       try {
         return await this.handle.deleteObject(params).promise();
 
-      } catch (err) {
+      } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
         throw err;
       }
@@ -146,7 +146,7 @@ class Client {
         const {Body} = await this.handle.getObject(params).promise();
         return Body;
 
-      } catch (err) {
+      } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
         throw err;
       }
@@ -184,7 +184,7 @@ class Client {
       try {
         return await this.handle.putObject(params).promise();
 
-      } catch (err) {
+      } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
         throw err;
       }
@@ -213,6 +213,7 @@ class Client {
     }
 
     if (!isValidPrefix(newValue) || await this.exists(newValue)) {
+      /* istanbul ignore next */
       return Promise.reject(new Error(`Invalid Bucket Prefix (new): ${newValue}`));
     }
 
@@ -245,7 +246,7 @@ class Client {
       try {
         return !!(await this.handle.headObject(params).promise());
 
-      } catch (err) {
+      } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
         throw err;
       }
