@@ -7,6 +7,7 @@ class Model {
   #name;
   #parent;
   #fields;
+  #index = 0;
 
   /**
    * @param {String} name
@@ -43,6 +44,10 @@ class Model {
     return this.#fields;
   }
 
+  get index() {
+    return this.#index;
+  }
+
   // Setters.
   set name(value) {
     if (isValidName(value)) {
@@ -53,6 +58,7 @@ class Model {
   set parent(value) {
     if (isValidParent(value)) {
       this.#parent = value;
+      this.#index = this.#parent.index + 1;
     }
   }
 
