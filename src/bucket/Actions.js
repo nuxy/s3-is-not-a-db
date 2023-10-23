@@ -16,6 +16,9 @@ class BucketActions {
    *
    * @param {Object} region
    *   S3 Region name.
+   *
+   * @example
+   * const actions = new Actions('s3-is-not-a-db', 'us-east-1');
    */
   constructor(bucket, region) {
     this.#client = new Client(bucket, region);
@@ -34,6 +37,12 @@ class BucketActions {
   /**
    * List objects.
    *
+   * @example
+   * actions.prefix = '/path/to/file/';
+   *
+   * const fileNames = await actions.list();
+   * // ['foo.ext', 'bar.ext', 'biz.ext', 'baz.ext']
+   *
    * @return {Promise<Object|Error>}
    */
   async list() {
@@ -47,6 +56,11 @@ class BucketActions {
    *   Object name/prefix.
    *
    * @return {Promise<Object|Error>}
+   *
+   * @example
+   * actions.prefix = '/path/to/file/';
+   *
+   * await actions.delete('file.ext');
    */
   async delete(fileName) {
     return await this.#client.delete(`${this.#prefixPath}/${fileName}`);
@@ -54,11 +68,16 @@ class BucketActions {
 
   /**
    * Fetch object.
-   * 
+   *
    * @param {String} fileName
    *   Object name/prefix.
    *
    * @return {Promise<Object|Error>}
+   *
+   * @example
+   * actions.prefix = '/path/to/file/';
+   *
+   * const data = await actions.fetch('file.ext');
    */
   async fetch(fileName) {
     return await this.#client.fetch(`${this.#prefixPath}/${fileName}`);
@@ -77,6 +96,11 @@ class BucketActions {
    *   Object content type (optional).
    *
    * @return {Promise<Object|Error>}
+   *
+   * @example
+   * actions.prefix = '/path/to/file/';
+   *
+   * await actions.write('file.ext', 'foo', 'text/plain');
    */
   async write(fileName, data, contentType) {
     return await this.#client.write(`${this.#prefixPath}/${fileName}`, data, contentType);
@@ -84,7 +108,7 @@ class BucketActions {
 
   /**
    * Rename object.
-   * 
+   *
    * @param {String} oldFileName
    *   Old Object as string.
    *
@@ -92,6 +116,11 @@ class BucketActions {
    *   New object as string.
    *
    * @return {Promise<Object|Error>}
+   *
+   * @example
+   * actions.prefix = '/path/to/file/';
+   *
+   * await actions.rename('file1.ext', 'file2.ext');
    */
   async rename(oldFileName, newFileName) {
     return await this.#client.rename(
@@ -106,6 +135,11 @@ class BucketActions {
    *   Object name/prefix.
    *
    * @return {Promise<Object|Error>}
+   *
+   * @example
+   * actions.prefix = '/path/to/file/';
+   *
+   * const exists = await actions.exists('file.ext');
    */
   async exists(fileName) {
     return await this.#client.exists(`${this.#prefixPath}/${fileName}`);

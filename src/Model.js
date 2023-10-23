@@ -11,6 +11,9 @@ class Model {
   /**
    * @param {String} name
    *   Model name.
+   *
+   * @example
+   * const modelFoo = new Model('foo');
    */
   constructor(name) {
     this.#name   = name;

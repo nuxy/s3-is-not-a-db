@@ -16,6 +16,9 @@ class Client {
    *
    * @param {Object} region
    *   S3 Region name.
+   *
+   * @example
+   * const client = new Client('s3-is-not-a-db', 'us-east-1');
    */
   constructor(bucket, region) {
     this.#handle = null;
@@ -65,7 +68,11 @@ class Client {
    * @param {String} prefix
    *   Object Prefix.
    *
-   * @return {Promise<Array>}
+   * @return {Promise<Array|Error>}
+   *
+   * @example
+   * const fileNames = await client.list('/path/to/file/');
+   * // ['foo.ext', 'bar.ext', 'biz.ext', 'baz.ext']
    */
   async list(prefix) {
     if (prefix) {
@@ -76,7 +83,6 @@ class Client {
 
       try {
         const {Body} = await this.handle.listObjects(params).promise();
-
         return Body.Contents.map(data => data.Key);
 
       } catch (err) {
@@ -94,7 +100,10 @@ class Client {
    * @param {String} value
    *   Object name/prefix.
    *
-   * @return {Promise<Object>}
+   * @return {Promise<Object|Error>}
+   *
+   * @example
+   * await client.delete('/path/to/file.ext');
    */
   async delete(value) {
     if (isValidPrefix(value) && await this.exists(value)) {
@@ -121,7 +130,10 @@ class Client {
    * @param {String} value
    *   Object Prefix.
    *
-   * @return {Promise<Object>}
+   * @return {Promise<Object|Error>}
+   *
+   * @example
+   * const data = await client.fetch('/path/to/file.ext');
    */
   async fetch(value) {
     if (isValidPrefix(value) && await this.exists(value)) {
@@ -132,7 +144,6 @@ class Client {
 
       try {
         const {Body} = await this.handle.getObject(params).promise();
-
         return Body;
 
       } catch (err) {
@@ -156,7 +167,10 @@ class Client {
    * @param {String} contentType
    *   Object content type (optional).
    *
-   * @return {Promise<Object>}
+   * @return {Promise<Object|Error>}
+   *
+   * @example
+   * await client.write('/path/to/file.ext', 'foo', 'text/plain');
    */
   async write(value, data, contentType) {
     if (isValidPrefix(value)) {
@@ -189,6 +203,9 @@ class Client {
    *   New object Prefix as string.
    *
    * @return {Promise<Object|Error>}
+   *
+   * @example
+   * await client.rename('/path/to/file1.ext', '/path/to/file2.ext');
    */
   async rename(oldValue, newValue) {
     if (!isValidPrefix(oldValue) || !(await this.exists(oldValue))) {
@@ -214,6 +231,9 @@ class Client {
    *   Object Prefix as string.
    *
    * @return {Promise<Object|Error>}
+   *
+   * @example
+   * const exists = await client.exists('/path/to/file.ext');
    */
   async exists(value) {
     if (isValidPrefix(value)) {
