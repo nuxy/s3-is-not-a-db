@@ -2,7 +2,9 @@
 
 // Local modules.
 const Actions = require('./bucket/Actions');
+const Prefix  = require('./bucket/Prefix');
 const Model   = require('./Model');
+const Common  = require('./Common');
 
 /**
  * Provides bucket interface.
@@ -32,11 +34,21 @@ class Bucket {
    *   Configuration options.
    */
   config(opts) {
-    const actions = new Actions(opts.bucket, opts.region);
-
     this.models.forEach(model => {
       if (model instanceof Model) {
-        this[model.name] = actions;
+        const name = Common.pascalCase(model.name);
+
+        if (!this[name]) {
+          const actions = new Actions(opts.bucket, opts.region);
+
+          actions.prefixPath = (new Prefix(model)).path();
+
+          // Define property (instance of Actions).
+          this[name] = actions;
+
+        } else /* istanbul ignore next */ {
+          throw new Error(`Cannot redeclare name ${name} in Model`);
+        }
       }
     });
 
