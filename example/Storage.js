@@ -1,8 +1,7 @@
 'use strict';
 
 // Local modules.
-const Bucket = require(`${PACKAGE_ROOT}/src/Bucket`);
-const Model  = require(`${PACKAGE_ROOT}/src/Model`);
+const {Bucket, Model} = require('../');
 
 /**
  * Model /foo

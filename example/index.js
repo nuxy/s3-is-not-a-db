@@ -2,6 +2,8 @@
 
 // Local modules.
 const Storage = require('./Storage');
+
+// Initialize client.
 const storage = new Storage();
 
 const client = storage.config({
@@ -9,6 +11,11 @@ const client = storage.config({
   region: 'us-east-1'
 });
 
-const data = client.Foo.fetch('00000000-0000-0000-0000-000000000000');
-
-console.log('DATA', data);
+// Query S3 storage.
+client.Foo.fetch('00000000-0000-0000-0000-000000000000')
+  .then(data => {
+    console.log(data);
+  })
+  .catch(err => {
+    console.info(err);
+  });
