@@ -246,9 +246,8 @@ class Client {
       try {
         return !!(await this.handle.headObject(params).promise());
 
-      } catch (err) /* istanbul ignore next */ {
-        console.warn(err.message);
-        throw err;
+      } catch /* istanbul ignore next */ {
+        return false;
       }
     }
 
