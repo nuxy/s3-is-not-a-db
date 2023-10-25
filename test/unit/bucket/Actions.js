@@ -1,8 +1,8 @@
 'use strict';
 
-const AWSMock        = require('aws-sdk-mock');
-const chai           = require('chai');
-const chaiAsPromised = require('chai-as-promised');
+const chai             = require('chai');
+const chaiAsPromised   = require('chai-as-promised');
+const sinon            = require('sinon');
 
 chai.use(chaiAsPromised);
 
@@ -13,13 +13,14 @@ const Actions = require(`${PACKAGE_ROOT}/src/bucket/Actions`);
 const Client  = require(`${PACKAGE_ROOT}/src/Client`);
 
 afterEach(() => {
-  AWSMock.restore();
+  sinon.restore();
 });
+
 
 describe('BucketActions', function() {
   const bucket     = 's3-is-not-a-db';
   const region     = 'us-east-1';
-  const prefixPath = '/path/to/file/';
+  const prefixPath = '/path/to/file';
   const actions    = new Actions(bucket, region);
 
   actions.prefixPath = prefixPath;
@@ -36,9 +37,7 @@ describe('BucketActions', function() {
   describe('Instance methods', function() {
     describe('list', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'listObjects', function(params, callback) {
-          callback(null, Promise.resolve({Body: {Contents: [{Key: 'foo'}]}}));
-        });
+        sinon.stub(Client.prototype, 'list').resolves('foo');
 
         const result = actions.list();
 
@@ -48,13 +47,7 @@ describe('BucketActions', function() {
 
     describe('delete', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'deleteObject', function(params, callback) {
-          callback(null, Promise.resolve());
-        });
-
-        AWSMock.mock('S3', 'headObject', function(params, callback) {
-          callback(null, Promise.resolve(true));
-        });
+        sinon.stub(Client.prototype, 'delete').resolves();
 
         const result = actions.delete('file.ext');
 
@@ -64,13 +57,7 @@ describe('BucketActions', function() {
 
     describe('fetch', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'getObject', function(params, callback) {
-          callback(null, Promise.resolve({Body: 'data'}));
-        });
-
-        AWSMock.mock('S3', 'headObject', function(params, callback) {
-          callback(null, Promise.resolve(true));
-        });
+        sinon.stub(Client.prototype, 'fetch').resolves('data');
 
         const result = actions.fetch('file.ext');
 
@@ -80,9 +67,7 @@ describe('BucketActions', function() {
 
     describe('write', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'putObject', function(params, callback) {
-          callback(null, Promise.resolve());
-        });
+        sinon.stub(Client.prototype, 'write').resolves();
 
         const result = actions.write('file.ext', 'plain/text');
 
@@ -92,29 +77,7 @@ describe('BucketActions', function() {
 
     describe('rename', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'deleteObject', function(params, callback) {
-          callback(null, Promise.resolve());
-        });
-
-        AWSMock.mock('S3', 'getObject', function(params, callback) {
-          callback(null, Promise.resolve({Body: 'data'}));
-        });
-
-        AWSMock.mock('S3', 'headObject', function(params, callback) {
-          switch (true) {
-            case /file1.ext/.test(params.Key):
-              callback(null, Promise.resolve(true));
-              break;
-
-            case /file2.ext/.test(params.Key):
-              callback(null, Promise.resolve(false));
-              break;
-          }
-        });
-
-        AWSMock.mock('S3', 'putObject', function(params, callback) {
-          callback(null, Promise.resolve());
-        });
+        sinon.stub(Client.prototype, 'rename').resolves();
 
         const result = actions.rename('file1.ext', 'file2.ext');
 
@@ -124,9 +87,7 @@ describe('BucketActions', function() {
 
     describe('exists', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'headObject', function(params, callback) {
-          callback(null, Promise.resolve(true));
-        });
+        sinon.stub(Client.prototype, 'exists').resolves(true);
 
         const result = actions.exists('file.ext');
 
