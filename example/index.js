@@ -1,5 +1,7 @@
 'use strict';
 
+const {v1: uuid} = require('uuid');
+
 // Local modules.
 const Storage = require('./Storage');
 
@@ -13,10 +15,12 @@ const client = storage.config({
 
 // Query S3 storage.
 (async function() {
-  const keyName = '00000000-0000-0000-0000-00000000000.json';
+  let keyName;
 
   // .. prefix foo
   try {
+    keyName = uuid();
+
     console.log("Test model 'Foo' with prefix 'foo'");
 
     await client.Foo.write(keyName, JSON.stringify({foo: 'bar'}));
@@ -37,6 +41,8 @@ const client = storage.config({
 
   // .. prefix foo/bar
   try {
+    keyName = uuid();
+
     console.log("Test model 'Bar' with prefix 'foo/bar'");
 
     await client.Bar.write(keyName, JSON.stringify({foo: 'bar'}));
@@ -57,6 +63,8 @@ const client = storage.config({
 
   // .. prefix foo/bar/biz
   try {
+    keyName = uuid();
+
     console.log("Test model 'Biz' with prefix 'foo/bar/biz'");
 
     await client.Biz.write(keyName, JSON.stringify({foo: 'bar'}));
@@ -77,6 +85,8 @@ const client = storage.config({
 
   // .. prefix foo/bar/baz
   try {
+    keyName = uuid();
+
     console.log("Test model 'Baz' with prefix 'foo/bar/biz/baz'");
 
     await client.Baz.write(keyName, JSON.stringify({foo: 'bar'}));

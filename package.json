@@ -10,8 +10,7 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.435.0",
-    "uuid": "^9.0.0"
+    "@aws-sdk/client-s3": "^3.435.0"
   },
   "devDependencies": {
     "aws-sdk-client-mock": "^3.0.0",
@@ -23,7 +22,8 @@
     "mocha": "latest",
     "nyc": "latest",
     "sinon": "latest",
-    "swagger-jsdoc": "latest"
+    "swagger-jsdoc": "latest",
+    "uuid": "latest"
   },
   "engines": {
     "node": ">=16.0.0"
