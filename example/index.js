@@ -22,7 +22,7 @@ const client = storage.config({
 
     const data = await client.Foo.fetch(keyName);
 
-    console.log(`Found: ${data.toString('utf-8')}`);
+    console.log(`Found: ${await data.transformToString()}`);
 
     await client.Foo.delete(keyName);
 

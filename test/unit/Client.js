@@ -1,8 +1,20 @@
 'use strict';
 
-const AWSMock        = require('aws-sdk-mock');
-const chai           = require('chai');
-const chaiAsPromised = require('chai-as-promised');
+const {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  HeadObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client
+} = require('@aws-sdk/client-s3');
+
+const {mockClient} = require('aws-sdk-client-mock');
+
+const s3Client = mockClient(S3Client);
+
+const chai             = require('chai');
+const chaiAsPromised   = require('chai-as-promised');
 
 chai.use(chaiAsPromised);
 
@@ -12,7 +24,7 @@ const expect = chai.expect;
 const Client = require(`${PACKAGE_ROOT}/src/Client`);
 
 afterEach(() => {
-  AWSMock.restore();
+  s3Client.reset();
 });
 
 describe('Client', function() {
@@ -43,9 +55,7 @@ describe('Client', function() {
   describe('Instance methods', function() {
     describe('list', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'listObjects', function(params, callback) {
-          callback(null, Promise.resolve({Body: {Contents: [{Key: 'foo'}]}}));
-        });
+        s3Client.on(ListObjectsV2Command).resolves({Contents: [{Key: 'foo'}]});
 
         const result = client.list('/path/to/file');
 
@@ -61,13 +71,9 @@ describe('Client', function() {
 
     describe('delete', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'deleteObject', function(params, callback) {
-          callback(null, Promise.resolve());
-        });
+        s3Client.on(DeleteObjectCommand).resolves();
 
-        AWSMock.mock('S3', 'headObject', function(params, callback) {
-          callback(null, Promise.resolve(true));
-        });
+        s3Client.on(HeadObjectCommand).resolves(true);
 
         const result = client.delete('/path/to/file.ext');
 
@@ -83,13 +89,9 @@ describe('Client', function() {
 
     describe('fetch', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'getObject', function(params, callback) {
-          callback(null, Promise.resolve({Body: 'data'}));
-        });
+        s3Client.on(GetObjectCommand).resolves({Body: 'data'});
 
-        AWSMock.mock('S3', 'headObject', function(params, callback) {
-          callback(null, Promise.resolve(true));
-        });
+        s3Client.on(HeadObjectCommand).resolves(true);
 
         const result = client.fetch('/path/to/file.ext');
 
@@ -105,9 +107,7 @@ describe('Client', function() {
 
     describe('write', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'putObject', function(params, callback) {
-          callback(null, Promise.resolve());
-        });
+        s3Client.on(PutObjectCommand).resolves();
 
         const result = client.write('/path/to/file.ext', '', 'plain/text');
 
@@ -123,29 +123,14 @@ describe('Client', function() {
 
     describe('rename', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'deleteObject', function(params, callback) {
-          callback(null, Promise.resolve());
-        });
+        s3Client.on(DeleteObjectCommand).resolves(true);
 
-        AWSMock.mock('S3', 'getObject', function(params, callback) {
-          callback(null, Promise.resolve({Body: 'data'}));
-        });
+        s3Client.on(GetObjectCommand).resolves({Body: 'data'});
 
-        AWSMock.mock('S3', 'headObject', function(params, callback) {
-          switch (true) {
-            case /file1.ext/.test(params.Key):
-              callback(null, Promise.resolve(true));
-              break;
+        s3Client.on(HeadObjectCommand, {Key: '/path/to/file1.ext'}).resolves(true);
+        s3Client.on(HeadObjectCommand, {Key: '/path/to/file2.ext'}).resolves(false);
 
-            case /file2.ext/.test(params.Key):
-              callback(null, Promise.resolve(false));
-              break;
-          }
-        });
-
-        AWSMock.mock('S3', 'putObject', function(params, callback) {
-          callback(null, Promise.resolve());
-        });
+        s3Client.on(PutObjectCommand).resolves();
 
         const result = client.rename('/path/to/file1.ext', '/path/to/file2.ext');
 
@@ -161,9 +146,7 @@ describe('Client', function() {
 
     describe('exists', function() {
       it('should resolve Promise', function() {
-        AWSMock.mock('S3', 'headObject', function(params, callback) {
-          callback(null, Promise.resolve(true));
-        });
+        s3Client.on(HeadObjectCommand).resolves(true);
 
         const result = client.exists('/path/to/file.ext');
 

@@ -1,6 +1,13 @@
 'use strict';
 
-const AWS = require('aws-sdk');
+const {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  HeadObjectCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+  S3Client
+} = require('@aws-sdk/client-s3');
 
 /**
  * Provides S3 client methods.
@@ -38,7 +45,7 @@ class Client {
    * Getters.
    */
   get handle() {
-    return new AWS.S3({region: this.region});
+    return new S3Client({region: this.region});
   }
 
   get bucket() {
@@ -76,14 +83,28 @@ class Client {
    */
   async list(prefix) {
     if (prefix) {
-      const params = {
+      const command = new ListObjectsV2Command({
         Bucket: this.bucket,
         Prefix: prefix,
-      };
+      });
 
       try {
-        const {Body} = await this.handle.listObjects(params).promise();
-        return Body.Contents.map(data => data.Key);
+        let isTruncated = true;
+
+        let contents = '';
+
+        while (isTruncated) {
+          const {Contents, IsTruncated, NextContinuationToken} = await this.handle.send(command);
+
+          const list = Contents.map(content => content.Key).join('\n');
+          contents += `${list}\n`;
+
+          isTruncated = IsTruncated;
+
+          command.input.ContinuationToken = NextContinuationToken;
+        }
+
+        return contents;
 
       } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
@@ -107,13 +128,13 @@ class Client {
    */
   async delete(value) {
     if (isValidPrefix(value) && await this.exists(value)) {
-      const params = {
+      const command = new DeleteObjectCommand({
         Bucket: this.bucket,
         Key: value
-      };
+      });
 
       try {
-        return await this.handle.deleteObject(params).promise();
+        return await this.handle.send(command);
 
       } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
@@ -137,14 +158,15 @@ class Client {
    */
   async fetch(value) {
     if (isValidPrefix(value) && await this.exists(value)) {
-      const params = {
+      const command = new GetObjectCommand({
         Bucket: this.bucket,
         Key: value
-      };
+      });
 
       try {
-        const {Body} = await this.handle.getObject(params).promise();
-        return Body;
+        const response = await this.handle.send(command);
+
+        return await response.Body;
 
       } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
@@ -174,15 +196,15 @@ class Client {
    */
   async write(value, data, contentType) {
     if (isValidPrefix(value)) {
-      const params = {
+      const command = new PutObjectCommand({
         Bucket: this.bucket,
         Key: value,
         Body: data,
         ...(contentType ? {ContentType: contentType} : {})
-      };
+      });
 
       try {
-        return await this.handle.putObject(params).promise();
+        return await this.handle.send(command);
 
       } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
@@ -238,13 +260,13 @@ class Client {
    */
   async exists(value) {
     if (isValidPrefix(value)) {
-      const params = {
+      const command = new HeadObjectCommand({
         Bucket: this.bucket,
         Key: value
-      };
+      });
 
       try {
-        return !!(await this.handle.headObject(params).promise());
+        return !!(await this.handle.send(command));
 
       } catch /* istanbul ignore next */ {
         return false;

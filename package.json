@@ -10,10 +10,11 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.435.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "aws-sdk-mock": "latest",
+    "aws-sdk-client-mock": "^3.0.0",
     "chai": "latest",
     "chai-as-promised": "latest",
     "coveralls": "latest",
