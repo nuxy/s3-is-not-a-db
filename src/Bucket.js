@@ -43,6 +43,8 @@ class Bucket {
 
           actions.prefixPath = (new Prefix(model)).path();
 
+          Object.freeze(actions);
+
           // Define property (instance of Actions).
           this[name] = actions;
 
