@@ -38,7 +38,7 @@ class BucketActions {
    * List objects.
    *
    * @example
-   * actions.prefix = '/path/to/file/';
+   * actions.prefix = 'path/to/file';
    *
    * const fileNames = await actions.list();
    * // ['foo.ext', 'bar.ext', 'biz.ext', 'baz.ext']
@@ -58,7 +58,7 @@ class BucketActions {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = '/path/to/file/';
+   * actions.prefix = 'path/to/file';
    *
    * await actions.delete('file.ext');
    */
@@ -75,7 +75,7 @@ class BucketActions {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = '/path/to/file/';
+   * actions.prefix = 'path/to/file';
    *
    * const data = await actions.fetch('file.ext');
    */
@@ -98,7 +98,7 @@ class BucketActions {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = '/path/to/file/';
+   * actions.prefix = 'path/to/file';
    *
    * await actions.write('file.ext', 'foo', 'text/plain');
    */
@@ -118,7 +118,7 @@ class BucketActions {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = '/path/to/file/';
+   * actions.prefix = 'path/to/file';
    *
    * await actions.rename('file1.ext', 'file2.ext');
    */
@@ -137,7 +137,7 @@ class BucketActions {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = '/path/to/file/';
+   * actions.prefix = 'path/to/file';
    *
    * const exists = await actions.exists('file.ext');
    */
