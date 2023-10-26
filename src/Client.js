@@ -94,7 +94,8 @@ class Client {
         let contents = '';
 
         while (isTruncated) {
-          const {Contents, IsTruncated, NextContinuationToken} = await this.handle.send(command);
+          const {Contents, IsTruncated, NextContinuationToken}
+            = await this.handle.send(command);
 
           const list = Contents.map(content => content.Key).join('\n');
           contents += `${list}\n`;
@@ -231,12 +232,12 @@ class Client {
    */
   async rename(oldValue, newValue) {
     if (!isValidPrefix(oldValue) || !(await this.exists(oldValue))) {
-      return Promise.reject(new Error(`Invalid Bucket Prefix (old): ${oldValue}`));
+      throw new Error(`Invalid Bucket Prefix (old): ${oldValue}`);
     }
 
     if (!isValidPrefix(newValue) || await this.exists(newValue)) {
       /* istanbul ignore next */
-      return Promise.reject(new Error(`Invalid Bucket Prefix (new): ${newValue}`));
+      throw new Error(`Invalid Bucket Prefix (new): ${newValue}`);
     }
 
     const data = await this.fetch(oldValue);
