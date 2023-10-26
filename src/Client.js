@@ -9,6 +9,10 @@ const {
   S3Client
 } = require('@aws-sdk/client-s3');
 
+const {
+  throwError
+} = require('./Errors');
+
 /**
  * Provides S3 client methods.
  */
@@ -113,7 +117,7 @@ class Client {
       }
     }
 
-    throw new Error(`Invalid Bucket Prefix: ${prefix}`);
+    throwError('INVALID_BUCKET_PREFIX', prefix);
   }
 
   /**
@@ -143,7 +147,7 @@ class Client {
       }
     }
 
-    throw new Error(`Invalid Bucket Prefix: ${value}`);
+    throwError('INVALID_BUCKET_PREFIX', value);
   }
 
   /**
@@ -175,7 +179,7 @@ class Client {
       }
     }
 
-    throw new Error(`Invalid Bucket Prefix: ${value}`);
+    throwError('INVALID_BUCKET_PREFIX', value);
   }
 
   /**
@@ -213,7 +217,7 @@ class Client {
       }
     }
 
-    throw new Error(`Invalid Bucket Prefix: ${value}`);
+    throwError('INVALID_BUCKET_PREFIX', value);
   }
 
   /**
@@ -232,12 +236,12 @@ class Client {
    */
   async rename(oldValue, newValue) {
     if (!isValidPrefix(oldValue) || !(await this.exists(oldValue))) {
-      throw new Error(`Invalid Bucket Prefix (old): ${oldValue}`);
+      throwError('INVALID_BUCKET_PREFIX', oldValue);
     }
 
     if (!isValidPrefix(newValue) || await this.exists(newValue)) {
       /* istanbul ignore next */
-      throw new Error(`Invalid Bucket Prefix (new): ${newValue}`);
+      throwError('INVALID_BUCKET_TARGET', newValue);
     }
 
     const data = await this.fetch(oldValue);
@@ -279,7 +283,7 @@ class Client {
       }
     }
 
-    throw new Error(`Invalid Bucket Prefix: ${value}`);
+    throwError('INVALID_BUCKET_PREFIX', value);
   }
 }
 

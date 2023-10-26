@@ -6,6 +6,10 @@ const Prefix  = require('./bucket/Prefix');
 const Model   = require('./Model');
 const Utils   = require('./Utils');
 
+const {
+  throwError
+} = require('./Errors');
+
 /**
  * Provides bucket interface.
  *
@@ -56,7 +60,7 @@ class Bucket {
           this[name] = actions;
 
         } else /* istanbul ignore next */ {
-          throw new Error(`Cannot redeclare name ${name} in Model`);
+          throwError('MODEL_NAME_EXISTS', name);
         }
       }
     });

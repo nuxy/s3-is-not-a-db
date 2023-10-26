@@ -3,6 +3,10 @@
 // Local modules.
 const Client = require('../Client');
 
+const {
+  throwError
+} = require('../Errors');
+
 /**
  * Provides bucket actions.
  */
@@ -179,7 +183,7 @@ class BucketActions {
     const data = await this.isLocked(keyName);
 
     if (data) {
-      throw new Error(`Lock exists for '${keyName}'`);
+      throwError('OBJECT_LOCK_EXISTS', keyName);
     }
 
     await this.write(keyName);
