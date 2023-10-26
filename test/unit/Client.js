@@ -144,13 +144,27 @@ describe('Client', function() {
       });
     });
 
-    describe('exists', function() {
-      it('should resolve Promise', function() {
-        s3Client.on(HeadObjectCommand).resolves(true);
+    describe('exists', async function() {
+      it('should resolve Promise (data)', async function() {
+        s3Client.on(HeadObjectCommand).resolves({
+          ETag: '686897696a7c876b7e',
+          LastModified: 'Thu, 25 Oct 2023 00:00:00 GMT',
+          Metadata: {}
+        });
 
         const result = client.exists('/path/to/file.ext');
 
-        return expect(result).to.eventually.be.true;
+        await expect(result).to.eventually.have.property('ETag');
+        await expect(result).to.eventually.have.property('LastModified');
+        await expect(result).to.eventually.have.property('Metadata');
+      });
+
+      it('should resolve Promise (false)', function() {
+        s3Client.on(HeadObjectCommand).rejects({name: 'NotFound'});
+
+        const result = client.exists('/path/to/file.ext');
+
+        return expect(result).to.eventually.be.false;
       });
 
       it('should resolve Error', function() {

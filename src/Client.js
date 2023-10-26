@@ -253,7 +253,7 @@ class Client {
    * @param {String} value
    *   Object Prefix as string.
    *
-   * @return {Promise<Object|Error>}
+   * @return {Promise<Object|Boolean|Error>}
    *
    * @example
    * const exists = await client.exists('/path/to/file.ext');
@@ -266,9 +266,14 @@ class Client {
       });
 
       try {
-        return !!(await this.handle.send(command));
+        return await this.handle.send(command);
 
-      } catch /* istanbul ignore next */ {
+      } catch (err) /* istanbul ignore next */ {
+        if (err.name !== 'NotFound') {
+          console.warn(err.message);
+          throw err;
+        }
+
         return false;
       }
     }
