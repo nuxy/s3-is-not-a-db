@@ -90,7 +90,8 @@ class Client {
 
       try {
         let isTruncated = true;
-        let contents    = [];
+
+        const contents = [];
 
         while (isTruncated) {
           const {Contents, IsTruncated, NextContinuationToken}
