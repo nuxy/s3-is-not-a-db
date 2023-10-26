@@ -14,7 +14,9 @@ class Model {
    *   Model name.
    *
    * @example
-   * const modelFoo = new Model('foo');
+   * const modelFoo  = new Model('foo');
+   * modelFoo.parent = null;
+   * modelFoo.fields = ['foo', 'bar', 'baz'];
    */
   constructor(name) {
     this.#name   = name;

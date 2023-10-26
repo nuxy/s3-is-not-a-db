@@ -10,11 +10,11 @@ const Common  = require('./Common');
  * Provides bucket interface.
  *
  * @example
- * const modelFoo = new Model('Foo');
+ * const modelFoo = new Model('foo');
  * modelFoo.parent = null;
  * modelFoo.fields = ['foo1', 'foo2', 'foo3'];
  *
- * const modelBar = new Model('Bar');
+ * const modelBar = new Model('bar');
  * modelBar.parent = modelFoo;
  * modelBar.fields = ['bar1', 'bar2', 'bar3'];
  *
