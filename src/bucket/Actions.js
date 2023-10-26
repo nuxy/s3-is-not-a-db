@@ -134,7 +134,7 @@ class BucketActions {
    * @param {String} keyName
    *   Object name.
    *
-   * @return {Promise<Object|Error>}
+   * @return {Promise<Object|Boolean|Error>}
    *
    * @example
    * actions.prefix = 'path/to/object';
@@ -143,6 +143,67 @@ class BucketActions {
    */
   async exists(keyName) {
     return await this.#client.exists(`${this.#prefixPath}/${keyName}`);
+  }
+
+  /**
+   * Check object lock exists.
+   *
+   * @param {String} keyName
+   *   Object name.
+   *
+   * @return {Promise<Boolean|Error>}
+   *
+   * @example
+   * actions.prefix = 'path/to/object';
+   *
+   * const data = await actions.isLocked('keyName');
+   */
+  async isLocked(keyName) {
+    return !!(await this.exists(`${keyName}.lock`));
+  }
+
+  /**
+   * Create object lock.
+   *
+   * @param {String} keyName
+   *   Object name.
+   *
+   * @return {Promise<undefined|Error>}
+   *
+   * @example
+   * actions.prefix = 'path/to/object';
+   *
+   * await actions.lockObject('keyName');
+   */
+  async lockObject(keyName) {
+    const data = await this.isLocked(keyName);
+
+    if (data) {
+      throw new Error(`Lock exists for '${keyName}'`);
+    }
+
+    await this.write(keyName);
+  }
+
+  /**
+   * Remove object lock.
+   *
+   * @param {String} keyName
+   *   Object name.
+   *
+   * @return {Promise<undefined|Error>}
+   *
+   * @example
+   * actions.prefix = 'path/to/object';
+   *
+   * await actions.unlockObject('keyName');
+   */
+  async unlockObject(keyName) {
+    const data = await this.isLocked(keyName);
+
+    if (data) {
+      await this.delete(keyName);
+    }
   }
 }
 

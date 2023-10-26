@@ -94,5 +94,53 @@ describe('BucketActions', function() {
         return expect(result).to.eventually.be.true;
       });
     });
+
+    describe('isLocked', function() {
+      it('should resolve Promise', async function() {
+        const callback = sinon.stub(Client.prototype, 'exists');
+
+        let result;
+
+        callback.onCall(0).resolves(false);
+
+        result = actions.isLocked('keyName');
+
+        expect(result).to.eventually.be.false;
+
+        callback.onCall(1).resolves(true);
+
+        result = actions.isLocked('keyName');
+
+        expect(result).to.eventually.be.true;
+      });
+    });
+
+    describe('lockObject', function() {
+      it('should resolve Promise', function() {
+        sinon.stub(Client.prototype, 'exists').resolves(false);
+
+        const result = actions.lockObject('keyName');
+
+        return expect(result).to.eventually.be.undefined;
+      });
+
+      it('should resolve Error', function() {
+        sinon.stub(Client.prototype, 'exists').resolves({});
+
+        const result = actions.lockObject('keyName');
+
+        return expect(result).to.be.rejectedWith(Error, /Lock exists for/);
+      });
+    });
+
+    describe('unlockObject', function() {
+      it('should resolve Promise', function() {
+        sinon.stub(Client.prototype, 'exists').resolves(true);
+
+        const result = actions.unlockObject('keyName');
+
+        return expect(result).to.eventually.be.undefined;
+      });
+    });
   });
 });
