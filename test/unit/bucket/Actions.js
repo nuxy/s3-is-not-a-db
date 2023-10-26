@@ -1,8 +1,8 @@
 'use strict';
 
-const chai             = require('chai');
-const chaiAsPromised   = require('chai-as-promised');
-const sinon            = require('sinon');
+const chai           = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const sinon          = require('sinon');
 
 chai.use(chaiAsPromised);
 
@@ -20,7 +20,7 @@ afterEach(() => {
 describe('BucketActions', function() {
   const bucket     = 's3-is-not-a-db';
   const region     = 'us-east-1';
-  const prefixPath = '/path/to/file';
+  const prefixPath = '/path/to/object';
   const actions    = new Actions(bucket, region);
 
   actions.prefixPath = prefixPath;
@@ -49,7 +49,7 @@ describe('BucketActions', function() {
       it('should resolve Promise', function() {
         sinon.stub(Client.prototype, 'delete').resolves();
 
-        const result = actions.delete('file.ext');
+        const result = actions.delete('keyName');
 
         return expect(result).to.eventually.be.undefined;
       });
@@ -59,7 +59,7 @@ describe('BucketActions', function() {
       it('should resolve Promise', function() {
         sinon.stub(Client.prototype, 'fetch').resolves('data');
 
-        const result = actions.fetch('file.ext');
+        const result = actions.fetch('keyName');
 
         return expect(result).to.eventually.be.equal('data');
       });
@@ -69,7 +69,7 @@ describe('BucketActions', function() {
       it('should resolve Promise', function() {
         sinon.stub(Client.prototype, 'write').resolves();
 
-        const result = actions.write('file.ext', 'plain/text');
+        const result = actions.write('keyName', 'plain/text');
 
         return expect(result).to.eventually.be.undefined;
       });
@@ -79,7 +79,7 @@ describe('BucketActions', function() {
       it('should resolve Promise', function() {
         sinon.stub(Client.prototype, 'rename').resolves();
 
-        const result = actions.rename('file1.ext', 'file2.ext');
+        const result = actions.rename('keyName1', 'keyName2');
 
         return expect(result).to.eventually.be.undefined;
       });
@@ -89,7 +89,7 @@ describe('BucketActions', function() {
       it('should resolve Promise', function() {
         sinon.stub(Client.prototype, 'exists').resolves(true);
 
-        const result = actions.exists('file.ext');
+        const result = actions.exists('keyName');
 
         return expect(result).to.eventually.be.true;
       });

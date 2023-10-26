@@ -124,7 +124,7 @@ class Client {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * await client.delete('/path/to/file.ext');
+   * await client.delete('/path/to/keyName');
    */
   async delete(value) {
     if (isValidPrefix(value) && await this.exists(value)) {
@@ -154,7 +154,7 @@ class Client {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * const data = await client.fetch('/path/to/file.ext');
+   * const data = await client.fetch('/path/to/keyName');
    */
   async fetch(value) {
     if (isValidPrefix(value) && await this.exists(value)) {
@@ -192,7 +192,7 @@ class Client {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * await client.write('/path/to/file.ext', 'foo', 'text/plain');
+   * await client.write('/path/to/keyName', 'foo', 'text/plain');
    */
   async write(value, data, contentType) {
     if (isValidPrefix(value)) {
@@ -227,7 +227,7 @@ class Client {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * await client.rename('/path/to/file1.ext', '/path/to/file2.ext');
+   * await client.rename('/path/to/keyName1', '/path/to/keyName2');
    */
   async rename(oldValue, newValue) {
     if (!isValidPrefix(oldValue) || !(await this.exists(oldValue))) {
@@ -256,7 +256,7 @@ class Client {
    * @return {Promise<Object|Boolean|Error>}
    *
    * @example
-   * const exists = await client.exists('/path/to/file.ext');
+   * const exists = await client.exists('/path/to/keyName');
    */
   async exists(value) {
     if (isValidPrefix(value)) {

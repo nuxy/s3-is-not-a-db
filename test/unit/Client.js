@@ -13,8 +13,8 @@ const {mockClient} = require('aws-sdk-client-mock');
 
 const s3Client = mockClient(S3Client);
 
-const chai             = require('chai');
-const chaiAsPromised   = require('chai-as-promised');
+const chai           = require('chai');
+const chaiAsPromised = require('chai-as-promised');
 
 chai.use(chaiAsPromised);
 
@@ -57,7 +57,7 @@ describe('Client', function() {
       it('should resolve Promise', function() {
         s3Client.on(ListObjectsV2Command).resolves({Contents: [{Key: 'foo'}]});
 
-        const result = client.list('/path/to/file');
+        const result = client.list('/path/to/objects');
 
         return expect(result).to.eventually.include('foo');
       });
@@ -75,7 +75,7 @@ describe('Client', function() {
 
         s3Client.on(HeadObjectCommand).resolves(true);
 
-        const result = client.delete('/path/to/file.ext');
+        const result = client.delete('/path/to/keyName');
 
         return expect(result).to.eventually.be.undefined;
       });
@@ -93,7 +93,7 @@ describe('Client', function() {
 
         s3Client.on(HeadObjectCommand).resolves(true);
 
-        const result = client.fetch('/path/to/file.ext');
+        const result = client.fetch('/path/to/keyName');
 
         return expect(result).to.eventually.be.equal('data');
       });
@@ -109,7 +109,7 @@ describe('Client', function() {
       it('should resolve Promise', function() {
         s3Client.on(PutObjectCommand).resolves();
 
-        const result = client.write('/path/to/file.ext', '', 'plain/text');
+        const result = client.write('/path/to/keyName', '', 'plain/text');
 
         return expect(result).to.eventually.be.undefined;
       });
@@ -127,12 +127,12 @@ describe('Client', function() {
 
         s3Client.on(GetObjectCommand).resolves({Body: 'data'});
 
-        s3Client.on(HeadObjectCommand, {Key: '/path/to/file1.ext'}).resolves(true);
-        s3Client.on(HeadObjectCommand, {Key: '/path/to/file2.ext'}).resolves(false);
+        s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName1'}).resolves(true);
+        s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName2'}).resolves(false);
 
         s3Client.on(PutObjectCommand).resolves();
 
-        const result = client.rename('/path/to/file1.ext', '/path/to/file2.ext');
+        const result = client.rename('/path/to/keyName1', '/path/to/keyName2');
 
         return expect(result).to.eventually.be.undefined;
       });
@@ -152,7 +152,7 @@ describe('Client', function() {
           Metadata: {}
         });
 
-        const result = client.exists('/path/to/file.ext');
+        const result = client.exists('/path/to/keyName');
 
         await expect(result).to.eventually.have.property('ETag');
         await expect(result).to.eventually.have.property('LastModified');
@@ -162,7 +162,7 @@ describe('Client', function() {
       it('should resolve Promise (false)', function() {
         s3Client.on(HeadObjectCommand).rejects({name: 'NotFound'});
 
-        const result = client.exists('/path/to/file.ext');
+        const result = client.exists('/path/to/keyName');
 
         return expect(result).to.eventually.be.false;
       });

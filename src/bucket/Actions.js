@@ -30,17 +30,17 @@ class BucketActions {
   }
 
   // Setters.
-  set prefixPath(fileName) {
-    this.#prefixPath = fileName;
+  set prefixPath(keyName) {
+    this.#prefixPath = keyName;
   }
 
   /**
    * List objects.
    *
    * @example
-   * actions.prefix = 'path/to/file';
+   * actions.prefix = 'path/to/objects';
    *
-   * const fileNames = await actions.list();
+   * const objects = await actions.list();
    * // ['foo.ext', 'bar.ext', 'biz.ext', 'baz.ext']
    *
    * @return {Promise<Object|Error>}
@@ -52,42 +52,42 @@ class BucketActions {
   /**
    * Delete object.
    *
-   * @param {String} fileName
-   *   Object name/prefix.
+   * @param {String} keyName
+   *   Object name.
    *
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = 'path/to/file';
+   * actions.prefix = 'path/to/object';
    *
-   * await actions.delete('file.ext');
+   * await actions.delete('keyName');
    */
-  async delete(fileName) {
-    return await this.#client.delete(`${this.#prefixPath}/${fileName}`);
+  async delete(keyName) {
+    return await this.#client.delete(`${this.#prefixPath}/${keyName}`);
   }
 
   /**
    * Fetch object.
    *
-   * @param {String} fileName
-   *   Object name/prefix.
+   * @param {String} keyName
+   *   Object name.
    *
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = 'path/to/file';
+   * actions.prefix = 'path/to/object';
    *
-   * const data = await actions.fetch('file.ext');
+   * const data = await actions.fetch('keyName');
    */
-  async fetch(fileName) {
-    return await this.#client.fetch(`${this.#prefixPath}/${fileName}`);
+  async fetch(keyName) {
+    return await this.#client.fetch(`${this.#prefixPath}/${keyName}`);
   }
 
   /**
    * Write object.
    *
-   * @param {String} fileName
-   *   Object name/prefix.
+   * @param {String} keyName
+   *   Object name.
    *
    * @param {String|Buffer} data
    *   Object data.
@@ -98,51 +98,51 @@ class BucketActions {
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = 'path/to/file';
+   * actions.prefix = 'path/to/object';
    *
-   * await actions.write('file.ext', 'foo', 'text/plain');
+   * await actions.write('keyName', 'foo', 'text/plain');
    */
-  async write(fileName, data, contentType) {
-    return await this.#client.write(`${this.#prefixPath}/${fileName}`, data, contentType);
+  async write(keyName, data, contentType) {
+    return await this.#client.write(`${this.#prefixPath}/${keyName}`, data, contentType);
   }
 
   /**
    * Rename object.
    *
-   * @param {String} oldFileName
+   * @param {String} oldKeyName
    *   Old Object as string.
    *
-   * @param {String} newFileName
+   * @param {String} newKeyName
    *   New object as string.
    *
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = 'path/to/file';
+   * actions.prefix = 'path/to/object';
    *
-   * await actions.rename('file1.ext', 'file2.ext');
+   * await actions.rename('keyName1', 'keyName2');
    */
-  async rename(oldFileName, newFileName) {
+  async rename(oldKeyName, newKeyName) {
     return await this.#client.rename(
-      `${this.#prefixPath}/${oldFileName}`, `${this.#prefixPath}/${newFileName}`
+      `${this.#prefixPath}/${oldKeyName}`, `${this.#prefixPath}/${newKeyName}`
     );
   }
 
   /**
    * Check object exists.
    *
-   * @param {String} fileName
-   *   Object name/prefix.
+   * @param {String} keyName
+   *   Object name.
    *
    * @return {Promise<Object|Error>}
    *
    * @example
-   * actions.prefix = 'path/to/file';
+   * actions.prefix = 'path/to/object';
    *
-   * const exists = await actions.exists('file.ext');
+   * const exists = await actions.exists('keyName');
    */
-  async exists(fileName) {
-    return await this.#client.exists(`${this.#prefixPath}/${fileName}`);
+  async exists(keyName) {
+    return await this.#client.exists(`${this.#prefixPath}/${keyName}`);
   }
 }
 
