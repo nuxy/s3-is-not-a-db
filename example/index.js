@@ -19,6 +19,8 @@ const client = storage.config({
 
   // .. prefix foo
   try {
+    let data;
+
     keyName = uuid();
 
     console.log("Test model 'Foo' with prefix 'foo'");
@@ -27,20 +29,24 @@ const client = storage.config({
 
     console.log(`Created: ${keyName}`);
 
-    const data = await client.Foo.fetch(keyName);
+    data = await client.Foo.fetch(keyName);
 
     console.log(`Found: ${await data.transformToString()}`);
 
     await client.Foo.delete(keyName);
 
-    console.log(`Removed: ${keyName}\n`);
+    console.log(`Removed: ${keyName}`);
+
+    data = await client.Foo.fetch(keyName);
 
   } catch (err) {
-    console.info(err);
+    console.info(`${err.message}\n`);
   }
 
   // .. prefix foo/bar
   try {
+    let data;
+
     keyName = uuid();
 
     console.log("Test model 'Bar' with prefix 'foo/bar'");
@@ -49,20 +55,24 @@ const client = storage.config({
 
     console.log(`Created: ${keyName}`);
 
-    const data = await client.Bar.fetch(keyName);
+    data = await client.Bar.fetch(keyName);
 
     console.log(`Found: ${await data.transformToString()}`);
 
     await client.Bar.delete(keyName);
 
-    console.log(`Removed: ${keyName}\n`);
+    console.log(`Removed: ${keyName}`);
+
+    data = await client.Foo.fetch(keyName);
 
   } catch (err) {
-    console.info(err);
+    console.info(`${err.message}\n`);
   }
 
   // .. prefix foo/bar/biz
   try {
+    let data;
+
     keyName = uuid();
 
     console.log("Test model 'Biz' with prefix 'foo/bar/biz'");
@@ -71,20 +81,24 @@ const client = storage.config({
 
     console.log(`Created: ${keyName}`);
 
-    const data = await client.Biz.fetch(keyName);
+    data = await client.Biz.fetch(keyName);
 
     console.log(`Found: ${await data.transformToString()}`);
 
     await client.Biz.delete(keyName);
 
-    console.log(`Removed: ${keyName}\n`);
+    console.log(`Removed: ${keyName}`);
+
+    data = await client.Foo.fetch(keyName);
 
   } catch (err) {
-    console.info(err);
+    console.info(`${err.message}\n`);
   }
 
   // .. prefix foo/bar/baz
   try {
+    let data;
+
     keyName = uuid();
 
     console.log("Test model 'Baz' with prefix 'foo/bar/biz/baz'");
@@ -93,15 +107,17 @@ const client = storage.config({
 
     console.log(`Created: ${keyName}`);
 
-    const data = await client.Baz.fetch(keyName);
+    data = await client.Baz.fetch(keyName);
 
     console.log(`Found: ${await data.transformToString()}`);
 
     await client.Baz.delete(keyName);
 
-    console.log(`Removed: ${keyName}\n`);
+    console.log(`Removed: ${keyName}`);
+
+    data = await client.Foo.fetch(keyName);
 
   } catch (err) {
-    console.info(err);
+    console.info(`${err.message}\n`);
   }
 })();
