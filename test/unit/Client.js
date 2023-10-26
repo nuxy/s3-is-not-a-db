@@ -73,8 +73,6 @@ describe('Client', function() {
       it('should resolve Promise', function() {
         s3Client.on(DeleteObjectCommand).resolves();
 
-        s3Client.on(HeadObjectCommand).resolves(true);
-
         const result = client.delete('/path/to/keyName');
 
         return expect(result).to.eventually.be.undefined;
@@ -90,8 +88,6 @@ describe('Client', function() {
     describe('fetch', function() {
       it('should resolve Promise', function() {
         s3Client.on(GetObjectCommand).resolves({Body: 'data'});
-
-        s3Client.on(HeadObjectCommand).resolves(true);
 
         const result = client.fetch('/path/to/keyName');
 

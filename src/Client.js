@@ -128,7 +128,7 @@ class Client {
    * await client.delete('/path/to/keyName');
    */
   async delete(value) {
-    if (isValidPrefix(value) && await this.exists(value)) {
+    if (isValidPrefix(value)) {
       const command = new DeleteObjectCommand({
         Bucket: this.bucket,
         Key: value
@@ -158,7 +158,7 @@ class Client {
    * const data = await client.fetch('/path/to/keyName');
    */
   async fetch(value) {
-    if (isValidPrefix(value) && await this.exists(value)) {
+    if (isValidPrefix(value)) {
       const command = new GetObjectCommand({
         Bucket: this.bucket,
         Key: value
