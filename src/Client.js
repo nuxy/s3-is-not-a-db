@@ -78,7 +78,7 @@ class Client {
    * @return {Promise<Array|Error>}
    *
    * @example
-   * const fileNames = await client.list('/path/to/file/');
+   * const objects = await client.list('/path/to/objects');
    * // ['foo.ext', 'bar.ext', 'biz.ext', 'baz.ext']
    */
   async list(prefix) {
@@ -90,15 +90,14 @@ class Client {
 
       try {
         let isTruncated = true;
-
-        let contents = '';
+        let contents    = [];
 
         while (isTruncated) {
           const {Contents, IsTruncated, NextContinuationToken}
             = await this.handle.send(command);
 
-          const list = Contents.map(content => content.Key).join('\n');
-          contents += `${list}\n`;
+          const list = Contents.map(content => content.Key);
+          contents.push(...list);
 
           isTruncated = IsTruncated;
 
