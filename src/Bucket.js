@@ -4,7 +4,7 @@
 const Actions = require('./bucket/Actions');
 const Prefix  = require('./bucket/Prefix');
 const Model   = require('./Model');
-const Common  = require('./Common');
+const Utils   = require('./Utils');
 
 /**
  * Provides bucket interface.
@@ -43,7 +43,7 @@ class Bucket {
   config(opts) {
     this.models.forEach(model => {
       if (model instanceof Model) {
-        const name = Common.pascalCase(model.name);
+        const name = Utils.pascalCase(model.name);
 
         if (!this[name]) {
           const actions = new Actions(opts.bucket, opts.region);

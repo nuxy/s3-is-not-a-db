@@ -5,15 +5,15 @@ const chai = require('chai');
 const expect = chai.expect;
 
 // Load modules.
-const Common = require(`${PACKAGE_ROOT}/src/Common.js`);
+const Utils = require(`${PACKAGE_ROOT}/src/Utils.js`);
 
-describe('Common module', function() {
+describe('Utils module', function() {
   describe('Static methods', function() {
     describe('pascalCase', function() {
-      const result1 = Common.pascalCase('foo-bar*Biz_baz');
-      const result2 = Common.pascalCase('FOO_BAR_BIZ_BAZ');
-      const result3 = Common.pascalCase('FooBarBiz--baz');
-      const result4 = Common.pascalCase('fooBar+biz$baz');
+      const result1 = Utils.pascalCase('foo-bar*Biz_baz');
+      const result2 = Utils.pascalCase('FOO_BAR_BIZ_BAZ');
+      const result3 = Utils.pascalCase('FooBarBiz--baz');
+      const result4 = Utils.pascalCase('fooBar+biz$baz');
 
       it('should return value', function() {
         expect(result1).to.be.an('string');

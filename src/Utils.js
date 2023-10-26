@@ -1,7 +1,7 @@
 'use strict';
 
 // Local reference.
-const Common = this;
+const Utils = this;
 
 /**
  * Return Pascal Case formatted string.
@@ -12,7 +12,7 @@ const Common = this;
  * @return {String}
  *
  * @example
- * const result = pascalCase('foo-bar_BizBaz);
+ * const result = Utils.pascalCase('foo-bar_BizBaz);
  * // FooBarBizBaz
  */
 exports.pascalCase = function(value) {
