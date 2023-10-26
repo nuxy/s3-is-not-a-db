@@ -24,7 +24,14 @@ const Common  = require('./Common');
  *
  * ..
  *
- * const storage = new Storage('s3-is-not-a-db', 'us-east-1');
+ * const storage = new Storage();
+ *
+ * const client = storage.config({
+ *   bucket: 's3-is-not-a-db',
+ *   region: 'us-east-1'
+ * });
+ *
+ * client.<Model>.<Action>()
  */
 class Bucket {
   models;
