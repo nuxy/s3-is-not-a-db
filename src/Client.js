@@ -190,21 +190,22 @@ class Client {
    * @param {String|Buffer} data
    *   Object data.
    *
-   * @param {String} contentType
-   *   Object content type (optional).
+   * @param {Object<contentType|metaData>} options
+   *   Request options.
    *
    * @return {Promise<Object|Error>}
    *
    * @example
    * await client.write('/path/to/keyName', 'foo', 'text/plain');
    */
-  async write(value, data, contentType) {
+  async write(value, data, options) {
     if (isValidPrefix(value)) {
       const command = new PutObjectCommand({
         Bucket: this.bucket,
         Key: value,
         Body: data,
-        ...(contentType ? {ContentType: contentType} : {})
+        ContentType: options?.contentType,
+        Metadata: options?.metaData,
       });
 
       try {

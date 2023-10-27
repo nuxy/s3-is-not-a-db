@@ -105,7 +105,9 @@ describe('Client', function() {
       it('should resolve Promise', function() {
         s3Client.on(PutObjectCommand).resolves();
 
-        const result = client.write('/path/to/keyName', '', 'plain/text');
+        const json = '{"foo":"bar"}';
+
+        const result = client.write('/path/to/keyName', json, {contentType: 'application/json'});
 
         return expect(result).to.eventually.be.undefined;
       });
