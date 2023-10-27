@@ -17,6 +17,10 @@ const messages = {
  *
  * @params {String}
  *   Replacement value.
+ *
+ * @example
+ * Utils.throwError('This "%s" and that "%s"', 'foo', 'bar', ..);
+ * // This "foo" and "bar"
  */
 function throwError() {
   const args = arguments;
