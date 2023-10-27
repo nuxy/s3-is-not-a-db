@@ -101,8 +101,7 @@ class Client {
           const {Contents, IsTruncated, NextContinuationToken}
             = await this.handle.send(command);
 
-          const list = Contents.map(content => content.Key);
-          contents.push(...list);
+          contents.push(...Contents.map(content => content.Key));
 
           isTruncated = IsTruncated;
 
