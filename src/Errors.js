@@ -2,6 +2,7 @@
 
 const messages = {
   INVALID_BUCKET_PREFIX: 'Invalid Bucket Prefix: %s',
+  INVALID_MODEL_TYPE:    'Invalid Model type: %s',
   INVALID_OBJECT_TARGET: 'Invalid Object target: %s',
   INVALID_MESSAGE_CODE:  'Invalid message code',
   MODEL_NAME_EXISTS:     "Cannot redeclare name '%s' in Model",

@@ -47,21 +47,19 @@ class Bucket {
   config(opts) {
     this.models.forEach(model => {
       if (model instanceof Model) {
+        const actions = new Actions(opts.bucket, opts.region);
+
+        actions.prefixPath = (new Prefix(model)).path();
+
+        Object.freeze(actions);
+
         const name = Utils.pascalCase(model.name);
 
-        if (!this[name]) {
-          const actions = new Actions(opts.bucket, opts.region);
+        // Define property (instance of Actions).
+        this[name] = actions;
 
-          actions.prefixPath = (new Prefix(model)).path();
-
-          Object.freeze(actions);
-
-          // Define property (instance of Actions).
-          this[name] = actions;
-
-        } else /* istanbul ignore next */ {
-          throwError('MODEL_NAME_EXISTS', name);
-        }
+      } else {
+        throwError('INVALID_MODEL_TYPE', typeof model);
       }
     });
 

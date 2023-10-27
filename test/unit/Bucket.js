@@ -10,14 +10,14 @@ const Bucket  = require(`${PACKAGE_ROOT}/src/Bucket`);
 const Model   = require(`${PACKAGE_ROOT}/src/Model`);
 
 describe('Bucket', function() {
-
-  // Create Models for testing.
-  const modelFoo = new Model('Foo');
-  const modelBar = new Model('Bar');
-  const modelBiz = new Model('Biz');
-  const modelBaz = new Model('Baz');
-
   describe('Instance methods', function() {
+
+    // Create Models for testing.
+    const modelFoo = new Model('Foo');
+    const modelBar = new Model('Bar');
+    const modelBiz = new Model('Biz');
+    const modelBaz = new Model('Baz');
+
     describe('config', function() {
       class Storage extends Bucket {
         models = [modelFoo, modelBar, modelBiz, modelBaz];
@@ -42,6 +42,27 @@ describe('Bucket', function() {
         expect(client.bar instanceof Actions).to.be.false;
         expect(client.biz instanceof Actions).to.be.false;
         expect(client.baz instanceof Actions).to.be.false;
+      });
+    });
+
+    describe('config (errors)', function() {
+      it('should throw Error', function() {
+        const modelFake = 'foo';
+
+        class Storage extends Bucket {
+          models = [modelFake];
+        }
+
+        const storage = new Storage();
+
+        const result = () => {
+          storage.config({
+            bucket: 's3-is-not-a-db',
+            region: 'us-east-1'
+          });
+        };
+
+        expect(result).to.throw('Invalid Model type: string');
       });
     });
   });
