@@ -52,59 +52,68 @@ class Model {
 
   // Setters.
   set name(value) {
-    if (isValidName(value)) {
+    if (Model.isValidName(value)) {
       this.#name = value;
     }
   }
 
   set parent(value) {
-    if (isValidParent(value)) {
+    if (Model.isValidParent(value)) {
       this.#parent = value;
       this.#index = this.#parent.index + 1;
     }
   }
 
   set fields(arr) {
-    if (isValidFields(arr)) {
+    if (Model.isValidFields(arr)) {
       this.#fields = arr;
     }
   }
-}
 
-/**
- * Verify the Modal name format.
- *
- * @param {String} value
- *  Name value to validate.
- *
- * @return {Boolean}
- */
-function isValidName(value) {
-  return value && /^[a-z0-9-_]+$/i.test(value);
-}
+  /**
+   * Verify the Modal name format.
+   *
+   * @param {String} value
+   *  Name value to validate.
+   *
+   * @return {Boolean}
+   *
+   * @example
+   * const result = Model.isValidName('foo');
+   */
+  static isValidName(value) {
+    return value && /^[a-z0-9-_]+$/i.test(value);
+  }
 
-/**
- * Verify the Modal parent type.
- *
- * @param {String} value
- *  Parent value to validate.
- *
- * @return {Boolean}
- */
-function isValidParent(value) {
-  return value instanceof Model;
-}
+  /**
+   * Verify the Modal parent type.
+   *
+   * @param {String} value
+   *  Parent value to validate.
+   *
+   * @return {Boolean}
+   *
+   * @example
+   * const result = Model.isValidParent(Model);
+   */
+  static isValidParent(value) {
+    return value instanceof Model;
+  }
 
-/**
- * Verify the Modal field format.
- *
- * @param {Array<String>} arr
- *  Fields names to validate.
- *
- * @return {Boolean}
- */
-function isValidFields(arr) {
-  return Array.isArray(arr) && arr.every(item => typeof item === 'string');
+  /**
+   * Verify the Modal field format.
+   *
+   * @param {Array<String>} arr
+   *  Fields names to validate.
+   *
+   * @return {Boolean}
+   *
+   * @example
+   * const result = Model.isValidFields(['foo', 'bar', biz', 'baz');
+   */
+  static isValidFields(arr) {
+    return Array.isArray(arr) && arr.every(item => typeof item === 'string');
+  }
 }
 
 module.exports = Model;

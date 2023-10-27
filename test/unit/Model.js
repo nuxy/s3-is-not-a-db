@@ -74,4 +74,51 @@ describe('Model', function() {
       });
     });
   });
+
+  describe('Static methods', function() {
+    describe('isValidName', function() {
+      it('should return value', function() {
+        const result1 = Model.isValidName('foo');
+        const result2 = Model.isValidName('b%&-r');
+
+        expect(result1).to.be.an('boolean');
+        expect(result1).to.be.true;
+
+        expect(result2).to.be.an('boolean');
+        expect(result2).to.be.false;
+      });
+    });
+
+    describe('isValidParent', function() {
+      it('should return value', function() {
+        const modelFoo = new Model('foo');
+
+        const result1 = Model.isValidParent(modelFoo);
+        const result2 = Model.isValidParent('foo');
+
+        expect(result1).to.be.an('boolean');
+        expect(result1).to.be.true;
+
+        expect(result2).to.be.an('boolean');
+        expect(result2).to.be.false;
+      });
+    });
+
+    describe('isValidFields', function() {
+      it('should return value', function() {
+        const result1 = Model.isValidFields(['foo', 'bar', 'biz', 'baz']);
+        const result2 = Model.isValidFields(['foo', {}, 'biz', 'baz']);
+        const result3 = Model.isValidFields('foo');
+
+        expect(result1).to.be.an('boolean');
+        expect(result1).to.be.true;
+
+        expect(result2).to.be.an('boolean');
+        expect(result2).to.be.false;
+
+        expect(result3).to.be.an('boolean');
+        expect(result3).to.be.false;
+      });
+    });
+  });
 });
