@@ -97,7 +97,7 @@ describe('BucketActions', function() {
 
     describe('isLocked', function() {
       it('should resolve Promise', async function() {
-        const callback = sinon.stub(Client.prototype, 'exists');
+        const callback = sinon.stub(Actions.prototype, 'exists');
 
         let result;
 
@@ -117,7 +117,7 @@ describe('BucketActions', function() {
 
     describe('lockObject', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Client.prototype, 'exists').resolves(false);
+        sinon.stub(Actions.prototype, 'exists').resolves(false);
 
         const result = actions.lockObject('keyName');
 
@@ -125,7 +125,7 @@ describe('BucketActions', function() {
       });
 
       it('should resolve Error', function() {
-        sinon.stub(Client.prototype, 'exists').resolves({});
+        sinon.stub(Actions.prototype, 'exists').resolves({});
 
         const result = actions.lockObject('keyName');
 
@@ -135,7 +135,7 @@ describe('BucketActions', function() {
 
     describe('unlockObject', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Client.prototype, 'exists').resolves(true);
+        sinon.stub(Actions.prototype, 'exists').resolves(true);
 
         const result = actions.unlockObject('keyName');
 
