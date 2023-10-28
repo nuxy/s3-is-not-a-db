@@ -11,21 +11,21 @@ modelFoo.parent = null;
 modelFoo.fields = ['foo1', 'foo2', 'foo3'];
 
 /**
- * Model 'Bar' maps to bucket prefix 'foo/bar'
+ * Model 'FooBar' maps to bucket prefix 'foo/bar'
  */
 const modelBar = new Model('bar');
 modelBar.parent = modelFoo;
 modelBar.fields = ['bar1', 'bar2', 'bar3'];
 
 /**
- * Model 'Biz' maps to bucket prefix 'foo/bar/biz'
+ * Model 'FooBarBiz' maps to bucket prefix 'foo/bar/biz'
  */
 const modelBiz = new Model('biz');
 modelBiz.parent = modelBar;
 modelBiz.fields = ['biz1', 'biz2', 'biz3'];
 
 /**
- * Model 'Baz' maps to bucket prefix 'foo/bar/biz/baz'
+ * Model 'FooBarBizBaz' maps to bucket prefix 'foo/bar/biz/baz'
  */
 const modelBaz = new Model('baz');
 modelBaz.parent = modelBiz;
