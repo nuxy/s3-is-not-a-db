@@ -2,6 +2,7 @@
 
 // Local modules.
 const Client = require('../Client');
+const Utils  = require('../Utils');
 
 const {
   throwError
@@ -13,6 +14,7 @@ const {
 class BucketActions {
   #client;
   #prefixPath;
+  #lockOwner;
 
   /**
    * @param {Object} bucket
@@ -67,6 +69,10 @@ class BucketActions {
    * await actions.delete('keyName');
    */
   async delete(keyName) {
+    if (!this.lockOwner && await this.isLocked(keyName)) {
+      throwError('OBJECT_LOCK_EXISTS', keyName);
+    }
+
     return await this.#client.delete(`${this.#prefixPath}/${keyName}`);
   }
 
@@ -84,6 +90,10 @@ class BucketActions {
    * const data = await actions.fetch('keyName');
    */
   async fetch(keyName) {
+    if (!this.lockOwner && await this.isLocked(keyName)) {
+      throwError('OBJECT_LOCK_EXISTS', keyName);
+    }
+
     return await this.#client.fetch(`${this.#prefixPath}/${keyName}`);
   }
 
@@ -107,6 +117,10 @@ class BucketActions {
    * await actions.write('keyName', 'foo', 'text/plain');
    */
   async write(keyName, data, contentType) {
+    if (!this.lockOwner && await this.isLocked(keyName)) {
+      throwError('OBJECT_LOCK_EXISTS', keyName);
+    }
+
     return await this.#client.write(`${this.#prefixPath}/${keyName}`, data, contentType);
   }
 
@@ -127,6 +141,10 @@ class BucketActions {
    * await actions.rename('keyName1', 'keyName2');
    */
   async rename(oldKeyName, newKeyName) {
+    if (!this.lockOwner && await this.isLocked(oldKeyName)) {
+      throwError('OBJECT_LOCK_EXISTS', oldKeyName);
+    }
+
     return await this.#client.rename(
       `${this.#prefixPath}/${oldKeyName}`, `${this.#prefixPath}/${newKeyName}`
     );
@@ -150,6 +168,63 @@ class BucketActions {
   }
 
   /**
+   * Execute a batch operation in sequential order.
+   * Use "Pessimistic Locking" for data integrity.
+   *
+   * @param {String} keyName
+   *   Object name.
+   *
+   * @param {Array<Promise>} actions
+   *   Array of promised Actions.
+   *
+   * @return {Promise|Error}
+   *
+   * @example
+   *   const keyName = 'file.json';
+   *   const operations = [];
+   *
+   *   // Fetch the object.
+   *   operations.push(() => {
+   *     return actions.fetch(keyName)
+   *       .then(JSON.parse);
+   *   });
+   *
+   *   // Update existing data.
+   *   operations.push(data => {
+   *     return actions.write(keyName,
+   *       JSON.stringify({...data, foo: 'bar'})
+   *     );
+   *   });
+   *
+   *   actions.batch(keyName, operations)
+   *     .catch(function(err) {
+   *       console.warn(err.message);
+   *     });
+   */
+  async batch(keyName, actions) {
+
+    // Set exclusive lock (first operation).
+    actions.unshift(() => {
+      return this.lockObject(keyName);
+    });
+
+    // Remove exclusive lock (last operation).
+    actions.push(() => {
+      return this.unlockObject(keyName)
+        .then(() => {
+          this.lockOwner = null;
+        });
+    });
+
+    return actions.reduce(function(current, next) {
+      return current.then(next);
+    }, Promise.resolve([]))
+      .catch(function(err) {
+        throw new Error(err.message);
+      });
+  }
+
+  /**
    * Check object lock exists.
    *
    * @param {String} keyName
@@ -160,10 +235,18 @@ class BucketActions {
    * @example
    * actions.prefix = 'path/to/object';
    *
-   * const data = await actions.isLocked('keyName');
+   * const result = await actions.isLocked('keyName');
    */
   async isLocked(keyName) {
-    return !!(await this.exists(`${keyName}.lock`));
+    const data = await this.exists(`${keyName}.lock`);
+
+    const ownerId = data?.Metadata?.ownerId;
+
+    if (ownerId && ownerId !== this.#lockOwner) {
+      return false;
+    }
+
+    return !!data;
   }
 
   /**
@@ -186,7 +269,11 @@ class BucketActions {
       throwError('OBJECT_LOCK_EXISTS', keyName);
     }
 
-    await this.write(keyName);
+    const ownerId = Utils.genRandomStr();
+
+    await this.write(keyName, '', {metaData: {ownerId}});
+
+    this.lockOwner = ownerId;
   }
 
   /**

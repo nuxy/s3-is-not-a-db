@@ -16,7 +16,6 @@ afterEach(() => {
   sinon.restore();
 });
 
-
 describe('BucketActions', function() {
   const bucket     = 's3-is-not-a-db';
   const region     = 'us-east-1';
@@ -53,9 +52,19 @@ describe('BucketActions', function() {
 
         return expect(result).to.eventually.be.undefined;
       });
+
+      it('should resolve Error', async function() {
+        actions.lockObject('keyName');
+
+        sinon.stub(Actions.prototype, 'isLocked').resolves(true);
+
+        const result = actions.delete('keyName');
+
+        return expect(result).to.be.rejectedWith(Error, /Lock exists for/);
+      });
     });
 
-    describe('fetch', function() {
+    describe('fetch', async function() {
       it('should resolve Promise', function() {
         sinon.stub(Client.prototype, 'fetch').resolves('data');
 
@@ -63,15 +72,35 @@ describe('BucketActions', function() {
 
         return expect(result).to.eventually.be.equal('data');
       });
+
+      it('should resolve Error', async function() {
+        actions.lockObject('keyName');
+
+        sinon.stub(Actions.prototype, 'isLocked').resolves(true);
+
+        const result = actions.fetch('keyName');
+
+        return expect(result).to.be.rejectedWith(Error, /Lock exists for/);
+      });
     });
 
     describe('write', function() {
       it('should resolve Promise', function() {
         sinon.stub(Client.prototype, 'write').resolves();
 
-        const result = actions.write('keyName', 'plain/text');
+        const result = actions.write('keyName', 'foo');
 
         return expect(result).to.eventually.be.undefined;
+      });
+
+      it('should resolve Error', async function() {
+        actions.lockObject('keyName');
+
+        sinon.stub(Actions.prototype, 'isLocked').resolves(true);
+
+        const result = actions.write('keyName', 'foo');
+
+        return expect(result).to.be.rejectedWith(Error, /Lock exists for/);
       });
     });
 
@@ -82,6 +111,16 @@ describe('BucketActions', function() {
         const result = actions.rename('keyName1', 'keyName2');
 
         return expect(result).to.eventually.be.undefined;
+      });
+
+      it('should resolve Error', async function() {
+        actions.lockObject('keyName');
+
+        sinon.stub(Actions.prototype, 'isLocked').resolves(true);
+
+        const result = actions.rename('keyName1', 'keyName2');
+
+        return expect(result).to.be.rejectedWith(Error, /Lock exists for/);
       });
     });
 
@@ -95,23 +134,94 @@ describe('BucketActions', function() {
       });
     });
 
+    describe('batch', function() {
+      const keyName = 'file.json';
+      const operations = [];
+
+      // Fetch the object.
+      operations.push(() => {
+        return actions.fetch(keyName)
+          .then(JSON.parse);
+        });
+
+      // Update existing data.
+      operations.push(data => {
+        return actions.write(keyName,
+          JSON.stringify({...data, biz: 'baz'})
+        );
+      });
+
+      it('should resolve Promise', async function() {
+        const json1 = '{"foo":"bar"}';
+        const json2 = '{"foo":"bar","biz":"baz"}';
+
+        const callback = sinon.stub(Client.prototype, 'fetch');
+        callback.onCall(0).resolves(json1);
+        callback.onCall(1).resolves(json2);
+
+        sinon.stub(Client.prototype, 'write').resolves();
+
+        await actions.batch(keyName, operations);
+
+        const result = actions.fetch(keyName);
+
+        return expect(result).to.eventually.equal(json2);
+      });
+
+      it('should resolve Error (methods)', async function() {
+        sinon.stub(actions, 'isLocked').resolves(true);
+
+        const keyName = 'file.json';
+
+        const result1 = async() => await actions.delete(keyName);
+        const result2 = async() => await actions.fetch(keyName);
+        const result3 = async() => await actions.write(keyName);
+        const result4 = async() => await actions.rename(keyName, 'bar');
+      });
+
+      it('should resolve Error (operations)', function() {
+        const json = '{"foo":"bar"}';
+
+        const callback = sinon.stub(Client.prototype, 'fetch');
+        callback.onCall(0).resolves(json);
+
+        sinon.stub(Client.prototype, 'write').rejects();
+
+        const result = actions.batch(keyName, operations);
+
+        return expect(result).to.be.rejectedWith(Error);
+      });
+
+      it('should resolve Error (locked)', function() {
+        sinon.stub(actions, 'isLocked').resolves(true);
+
+        const result = actions.batch(keyName, operations);
+
+        return expect(result).to.be.rejectedWith(Error, /Lock exists for/);
+      });
+    });
+
     describe('isLocked', function() {
       it('should resolve Promise', async function() {
         const callback = sinon.stub(Actions.prototype, 'exists');
 
-        let result;
-
         callback.onCall(0).resolves(false);
 
-        result = actions.isLocked('keyName');
+        const result1 = actions.isLocked('keyName');
 
-        expect(result).to.eventually.be.false;
+        expect(result1).to.eventually.be.false;
 
-        callback.onCall(1).resolves(true);
+        callback.onCall(1).resolves({});
 
-        result = actions.isLocked('keyName');
+        const result2 = actions.isLocked('keyName');
 
-        expect(result).to.eventually.be.true;
+        expect(result2).to.eventually.be.true;
+
+        callback.onCall(2).resolves({Metadata:{ownerId: 'abcdef123456'}});
+
+        const result3 = actions.isLocked('keyName');
+
+        expect(result3).to.eventually.be.false;
       });
     });
 
@@ -125,7 +235,7 @@ describe('BucketActions', function() {
       });
 
       it('should resolve Error', function() {
-        sinon.stub(Actions.prototype, 'exists').resolves({});
+        sinon.stub(Actions.prototype, 'exists').resolves(true);
 
         const result = actions.lockObject('keyName');
 
