@@ -53,7 +53,8 @@ class Bucket {
 
         Object.freeze(actions);
 
-        const name = Utils.pascalCase(model.name);
+        // format PascalCase
+        const name = Utils.pascalCase(actions.prefixPath);
 
         // Define property (instance of Actions).
         this[name] = actions;

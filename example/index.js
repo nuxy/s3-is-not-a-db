@@ -51,13 +51,13 @@ const client = storage.config({
 
     keyName = uuid();
 
-    console.log("Test model 'Bar' with prefix 'foo/bar'");
+    console.log("Test model 'FooBar' with prefix 'foo/bar'");
 
-    await client.Bar.write(keyName, JSON.stringify({foo: 'bar'}));
+    await client.FooBar.write(keyName, JSON.stringify({foo: 'bar'}));
 
     console.log(`Created: ${keyName}`);
 
-    data = await client.Bar.fetch(keyName);
+    data = await client.FooBar.fetch(keyName);
 
     console.log(`Found: ${await data.transformToString()}`);
 
@@ -65,7 +65,7 @@ const client = storage.config({
 
     console.log(`Removed: ${keyName}`);
 
-    if (!await client.Foo.fetch(keyName)) {
+    if (!await client.FooBar.fetch(keyName)) {
       console.log('Complete\n');
     }
 
@@ -79,21 +79,21 @@ const client = storage.config({
 
     keyName = uuid();
 
-    console.log("Test model 'Biz' with prefix 'foo/bar/biz'");
+    console.log("Test model 'FooBarBiz' with prefix 'foo/bar/biz'");
 
-    await client.Biz.write(keyName, JSON.stringify({foo: 'bar'}));
+    await client.FooBarBiz.write(keyName, JSON.stringify({foo: 'bar'}));
 
     console.log(`Created: ${keyName}`);
 
-    data = await client.Biz.fetch(keyName);
+    data = await client.FooBarBiz.fetch(keyName);
 
     console.log(`Found: ${await data.transformToString()}`);
 
-    await client.Biz.delete(keyName);
+    await client.FooBarBiz.delete(keyName);
 
     console.log(`Removed: ${keyName}`);
 
-    if (!await client.Foo.fetch(keyName)) {
+    if (!await client.FooBarBiz.fetch(keyName)) {
       console.log('Complete\n');
     }
 
@@ -107,21 +107,21 @@ const client = storage.config({
 
     keyName = uuid();
 
-    console.log("Test model 'Baz' with prefix 'foo/bar/biz/baz'");
+    console.log("Test model 'FooBarBizBaz' with prefix 'foo/bar/biz/baz'");
 
-    await client.Baz.write(keyName, JSON.stringify({foo: 'bar'}));
+    await client.FooBarBizBaz.write(keyName, JSON.stringify({foo: 'bar'}));
 
     console.log(`Created: ${keyName}`);
 
-    data = await client.Baz.fetch(keyName);
+    data = await client.FooBarBizBaz.fetch(keyName);
 
     console.log(`Found: ${await data.transformToString()}`);
 
-    await client.Baz.delete(keyName);
+    await client.FooBarBizBaz.delete(keyName);
 
     console.log(`Removed: ${keyName}`);
 
-    if (!await client.Foo.fetch(keyName)) {
+    if (!await client.FooBarBizBaz.fetch(keyName)) {
       console.log('Complete\n');
     }
 
