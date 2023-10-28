@@ -5,9 +5,9 @@ const chai = require('chai');
 const expect = chai.expect;
 
 // Load modules.
-const Actions = require(`${PACKAGE_ROOT}/src/bucket/Actions`);
 const Bucket  = require(`${PACKAGE_ROOT}/src/Bucket`);
-const Model   = require(`${PACKAGE_ROOT}/src/Model`);
+const Actions = require(`${PACKAGE_ROOT}/src/bucket/Actions`);
+const Model   = require(`${PACKAGE_ROOT}/src/bucket/Model`);
 
 describe('Bucket', function() {
   describe('Instance methods', function() {

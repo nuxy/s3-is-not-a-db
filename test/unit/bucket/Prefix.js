@@ -6,7 +6,7 @@ const expect = chai.expect;
 
 // Load modules.
 const Prefix = require(`${PACKAGE_ROOT}/src/bucket/Prefix`);
-const Model  = require(`${PACKAGE_ROOT}/src/Model`);
+const Model  = require(`${PACKAGE_ROOT}/src/bucket/Model`);
 
 describe('BucketPrefix', function() {
 

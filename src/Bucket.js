@@ -3,7 +3,7 @@
 // Local modules.
 const Actions = require('./bucket/Actions');
 const Prefix  = require('./bucket/Prefix');
-const Model   = require('./Model');
+const Model   = require('./bucket/Model');
 const Utils   = require('./Utils');
 
 const {

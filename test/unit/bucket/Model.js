@@ -5,9 +5,9 @@ const chai = require('chai');
 const expect = chai.expect;
 
 // Load modules.
-const Model = require(`${PACKAGE_ROOT}/src/Model`);
+const Model = require(`${PACKAGE_ROOT}/src/bucket/Model`);
 
-describe('Model', function() {
+describe('BucketModel', function() {
   describe('Getters/Setters', function() {
     describe('name', function() {
       it('should return value', function() {

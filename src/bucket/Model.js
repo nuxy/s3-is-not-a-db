@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * Provides data representation and methods.
+ * Provides bucket data representation.
  */
-class Model {
+class BucketModel {
   #name;
   #parent;
   #fields;
@@ -14,7 +14,7 @@ class Model {
    *   Model name.
    *
    * @example
-   * const modelFoo  = new Model('foo');
+   * const modelFoo  = new BucketModel('foo');
    * modelFoo.parent = null;
    * modelFoo.fields = ['foo', 'bar', 'baz'];
    */
@@ -52,20 +52,20 @@ class Model {
 
   // Setters.
   set name(value) {
-    if (Model.isValidName(value)) {
+    if (BucketModel.isValidName(value)) {
       this.#name = value;
     }
   }
 
   set parent(value) {
-    if (Model.isValidParent(value)) {
+    if (BucketModel.isValidParent(value)) {
       this.#parent = value;
       this.#index = this.#parent.index + 1;
     }
   }
 
   set fields(arr) {
-    if (Model.isValidFields(arr)) {
+    if (BucketModel.isValidFields(arr)) {
       this.#fields = arr;
     }
   }
@@ -79,7 +79,7 @@ class Model {
    * @return {Boolean}
    *
    * @example
-   * const result = Model.isValidName('foo');
+   * const result = BucketModel.isValidName('foo');
    */
   static isValidName(value) {
     return value && /^[a-z0-9-_]+$/i.test(value);
@@ -94,10 +94,10 @@ class Model {
    * @return {Boolean}
    *
    * @example
-   * const result = Model.isValidParent(Model);
+   * const result = BucketModel.isValidParent(BucketModel);
    */
   static isValidParent(value) {
-    return value instanceof Model;
+    return value instanceof BucketModel;
   }
 
   /**
@@ -109,11 +109,11 @@ class Model {
    * @return {Boolean}
    *
    * @example
-   * const result = Model.isValidFields(['foo', 'bar', biz', 'baz');
+   * const result = BucketModel.isValidFields(['foo', 'bar', biz', 'baz');
    */
   static isValidFields(arr) {
     return Array.isArray(arr) && arr.every(item => typeof item === 'string');
   }
 }
 
-module.exports = Model;
+module.exports = BucketModel;
