@@ -37,10 +37,12 @@ const client = storage.config({
 
     console.log(`Removed: ${keyName}`);
 
-    data = await client.Foo.fetch(keyName);
+    if (!await client.Foo.fetch(keyName)) {
+      console.log('Complete\n');
+    }
 
   } catch (err) {
-    console.info(`${err.message}\n`);
+    console.info(`${err}\n`);
   }
 
   // .. prefix foo/bar
@@ -63,7 +65,9 @@ const client = storage.config({
 
     console.log(`Removed: ${keyName}`);
 
-    data = await client.Foo.fetch(keyName);
+    if (!await client.Foo.fetch(keyName)) {
+      console.log('Complete\n');
+    }
 
   } catch (err) {
     console.info(`${err.message}\n`);
@@ -89,7 +93,9 @@ const client = storage.config({
 
     console.log(`Removed: ${keyName}`);
 
-    data = await client.Foo.fetch(keyName);
+    if (!await client.Foo.fetch(keyName)) {
+      console.log('Complete\n');
+    }
 
   } catch (err) {
     console.info(`${err.message}\n`);
@@ -115,7 +121,9 @@ const client = storage.config({
 
     console.log(`Removed: ${keyName}`);
 
-    data = await client.Foo.fetch(keyName);
+    if (!await client.Foo.fetch(keyName)) {
+      console.log('Complete\n');
+    }
 
   } catch (err) {
     console.info(`${err.message}\n`);
