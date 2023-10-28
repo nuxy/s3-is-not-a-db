@@ -56,10 +56,14 @@ describe('BucketPrefix', function() {
 
     describe('getParam', function() {
       it('should return value', function() {
-        const param = prefix.getParam(2);
+        const param1 = prefix.getParam();
+        const param2 = prefix.getParam(2);
 
-        expect(param).to.be.an('string');
-        expect(param).to.equal('bar');
+        expect(param1).to.be.an('string');
+        expect(param1).to.equal('foo');
+
+        expect(param2).to.be.an('string');
+        expect(param2).to.equal('bar');
       });
     });
 
