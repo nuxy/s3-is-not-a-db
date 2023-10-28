@@ -7,7 +7,8 @@
     "gendoc": "jsdoc -d doc -r src",
     "lint": "eslint src test",
     "test": "nyc mocha --require test/mocha.env.js 'test/**/*.js'",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "parallel": "concurrently 'node example' 'node example' 'node example'"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.435.0"
@@ -16,6 +17,7 @@
     "aws-sdk-client-mock": "^3.0.0",
     "chai": "latest",
     "chai-as-promised": "latest",
+    "concurrently": "latest",
     "coveralls": "latest",
     "eslint": "latest",
     "jsdoc": "latest",
