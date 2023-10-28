@@ -1,6 +1,10 @@
 'use strict';
 
 const {
+  BucketLocationConstraint
+} = require('@aws-sdk/client-s3/dist-cjs/models/models_0');
+
+const {
   DeleteObjectCommand,
   GetObjectCommand,
   HeadObjectCommand,
@@ -323,7 +327,9 @@ function isValidPrefix(value) {
  * @return {Boolean}
  */
 function isValidRegion(value) {
-  return ['us-east-1', 'us-east-1', 'us-west-1', 'us-west-2'].includes(value);
+  const list = Object.values(BucketLocationConstraint);
+
+  return value === 'us-east-1' || list.includes(value);
 }
 
 module.exports = Client;
