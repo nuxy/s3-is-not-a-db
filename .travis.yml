@@ -1,0 +1,22 @@
+jobs:
+  include:
+    - language: node_js
+      node_js:
+        - "16"
+      install:
+        - npm install
+      script:
+        - npm run lint
+        - npm run test
+        - npm run parallel
+      after_success: npm run coverage
+    - language: python
+      python:
+        - "3.9"
+      install:
+        - pip install semgrep
+      script:
+        - semgrep ci --config auto
+branches:
+  only:
+    - master

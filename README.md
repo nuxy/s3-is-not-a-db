@@ -1,5 +1,7 @@
 # s3-is-not-a-db
 
+[![Build Status](https://api.travis-ci.com/nuxy/s3-is-not-a-db.svg?branch=master)](https://app.travis-ci.com/github/nuxy/s3-is-not-a-db) [![Coverage](https://coveralls.io/repos/nuxy/s3-is-not-a-db/badge.svg?branch=master)](https://coveralls.io/r/nuxy/s3-is-not-a-db?branch=master)
+
 ## Developers
 
 ### CLI options
