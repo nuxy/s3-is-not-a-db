@@ -10,11 +10,17 @@ const Model = require(`${PACKAGE_ROOT}/src/Model`);
 describe('Model', function() {
   describe('Getters/Setters', function() {
     describe('name', function() {
-      const modelFoo = new Model('foo');
-
       it('should return value', function() {
+        const modelFoo = new Model('foo');
+
         expect(modelFoo.name).to.be.an('string');
         expect(modelFoo.name).to.equal('foo');
+      });
+
+      it('should be null', function() {
+        const modelFoo = new Model('');
+
+        expect(modelFoo.parent).to.be.null;
       });
     });
 
@@ -22,23 +28,36 @@ describe('Model', function() {
       const modelFoo = new Model('foo');
       const modelBar = new Model('bar');
 
-      modelFoo.parent = modelBar;
-
       it('should return value', function() {
+        modelFoo.parent = modelBar;
+
         expect(modelFoo.parent instanceof Model).to.be.true;
         expect(modelFoo.parent).to.equal(modelBar);
+      });
+
+      it('should be null', function() {
+        modelBar.parent = 'modelFake';
+
+        expect(modelBar.parent).to.be.null;
       });
     });
 
     describe('fields', function() {
-      const modelFoo = new Model('foo');
-      const fields = ['foo', 'bar'];
-
-      modelFoo.fields = fields;
-
       it('should return value', function() {
+        const modelFoo = new Model('foo');
+        const fields = ['foo', 'bar'];
+
+        modelFoo.fields = fields;
+
         expect(modelFoo.fields).to.be.an('array');
         expect(modelFoo.fields).to.equal(fields);
+      });
+
+      it('should be null', function() {
+        const modelFoo = new Model('foo');
+        modelFoo.fields = ['foo', {}];
+
+        expect(modelFoo.fields).to.be.null;
       });
     });
 
