@@ -1,6 +1,8 @@
-# s3-is-not-a-db
+# S3 is NOT a DB
 
 [![Build Status](https://api.travis-ci.com/nuxy/s3-is-not-a-db.svg?branch=master)](https://app.travis-ci.com/github/nuxy/s3-is-not-a-db) [![Coverage](https://coveralls.io/repos/nuxy/s3-is-not-a-db/badge.svg?branch=master)](https://coveralls.io/r/nuxy/s3-is-not-a-db?branch=master)
+
+Simple interface to using [Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) as a database. :warning: Work In Progress :warning:
 
 ## Developers
 
@@ -13,6 +15,10 @@ Run [ESLint](https://eslint.org/) on project sources:
 Run [Mocha](https://mochajs.org) unit tests:
 
     $ npm run test
+
+Run the [example](https://github.com/nuxy/s3-is-not-a-db/tree/master/example) concurrently:
+
+    $ npm run parallel
 
 ## Versioning
 
