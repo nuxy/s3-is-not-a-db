@@ -240,8 +240,7 @@ class Client {
     }
 
     if (!isValidPrefix(newValue) || await this.exists(newValue)) {
-      /* istanbul ignore next */
-      throwError('INVALID_BUCKET_TARGET', newValue);
+      throwError('INVALID_OBJECT_TARGET', newValue);
     }
 
     const data = await this.fetch(oldValue);

@@ -34,11 +34,17 @@ describe('Client', function() {
 
   describe('Getters/Setters', function() {
     describe('bucket', function() {
-      client.bucket = bucket;
-
       it('should return value', function() {
+        client.bucket = bucket;
+
         expect(client.bucket).to.be.an('string');
         expect(client.bucket).to.equal(bucket);
+      });
+
+      it('should be undefined', function() {
+        const client = new Client('s3&is\not/a*db', region);
+
+        expect(client.bucket).to.be.undefined;
       });
     });
 
@@ -48,6 +54,12 @@ describe('Client', function() {
       it('should return value', function() {
         expect(client.region).to.be.an('string');
         expect(client.region).to.equal(region);
+      });
+
+      it('should be default', function() {
+        client.region = 'us-fake-1';
+
+        expect(client.region).to.be.eq('us-east-1');
       });
     });
   });
@@ -135,10 +147,24 @@ describe('Client', function() {
         return expect(result).to.eventually.be.undefined;
       });
 
-      it('should resolve Error', function() {
-        const result = client.rename('', '');
+      it('should resolve Error', async function() {
+        const result1 = client.rename('', '');
 
-        return expect(result).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
+        await expect(result1).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
+
+        s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName1'}).resolves(true);
+        s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName2'}).resolves(false);
+
+        const result2 = client.rename('/path/to/keyName1', '');
+
+        await expect(result2).to.be.rejectedWith(Error, /Invalid Object target/);
+
+        s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName1'}).resolves(false);
+        s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName2'}).resolves(true);
+
+        const result3 = client.rename('', '/path/to/keyName2');
+
+        await expect(result3).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
       });
     });
 
