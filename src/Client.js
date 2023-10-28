@@ -173,8 +173,12 @@ class Client {
         return await response.Body;
 
       } catch (err) /* istanbul ignore next */ {
-        console.warn(err.message);
-        throw err;
+        if (err.name !== 'NoSuchKey') {
+          console.warn(err.message);
+          throw err;
+        }
+
+        return false;
       }
     }
 

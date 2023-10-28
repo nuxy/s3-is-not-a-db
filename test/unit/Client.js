@@ -106,6 +106,17 @@ describe('Client', function() {
         return expect(result).to.eventually.be.equal('data');
       });
 
+      it('should resolve Promise (false)', function() {
+        const error = new Error();
+        error.name = 'NoSuchKey';
+
+        s3Client.on(GetObjectCommand).rejects(error);
+
+        const result = client.fetch('foo');
+
+        return expect(result).to.eventually.be.false;
+      });
+
       it('should resolve Error', function() {
         const result = client.fetch('');
 
@@ -184,7 +195,10 @@ describe('Client', function() {
       });
 
       it('should resolve Promise (false)', function() {
-        s3Client.on(HeadObjectCommand).rejects({name: 'NotFound'});
+        const error = new Error();
+        error.name = 'NotFound';
+
+        s3Client.on(HeadObjectCommand).rejects(error);
 
         const result = client.exists('/path/to/keyName');
 
