@@ -11,6 +11,24 @@
     "example-single": "node example",
     "example-parallel": "concurrently 'node example' 'node example' 'node example'"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nuxy/s3-is-not-a-db.git"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "amazon",
+    "s3",
+    "database",
+    "interface"
+  ],
+  "bugs": {
+    "url": "https://github.com/nuxy/s3-is-not-a-db/issues"
+  },
+  "homepage": "https://github.com/nuxy/s3-is-not-a-db#readme",
+  "author": "Marc S. Brooks <devel@mbrooks.info> (https://mbrooks.info)",
+  "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.435.0"
   },
