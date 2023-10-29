@@ -25,7 +25,9 @@ const client = storage.config({
 
     console.log("Test model 'Foo' with prefix 'foo'");
 
-    await client.Foo.write(keyName, JSON.stringify({foo: 'bar'}));
+    await client.Foo.write(keyName, {
+      foo1: 'value1', foo2: 'value2', foo3: 'value3'
+    });
 
     console.log(`Created: ${keyName}`);
 
@@ -53,7 +55,9 @@ const client = storage.config({
 
     console.log("Test model 'FooBar' with prefix 'foo/bar'");
 
-    await client.FooBar.write(keyName, JSON.stringify({foo: 'bar'}));
+    await client.FooBar.write(keyName, {
+      bar1: 'value1', bar2: 'value2', bar3: 'value3'
+    });
 
     console.log(`Created: ${keyName}`);
 
@@ -81,7 +85,9 @@ const client = storage.config({
 
     console.log("Test model 'FooBarBiz' with prefix 'foo/bar/biz'");
 
-    await client.FooBarBiz.write(keyName, JSON.stringify({foo: 'bar'}));
+    await client.FooBarBiz.write(keyName, {
+      biz1: 'value1', biz2: 'value2', biz3: 'value3'
+    });
 
     console.log(`Created: ${keyName}`);
 
@@ -109,7 +115,9 @@ const client = storage.config({
 
     console.log("Test model 'FooBarBizBaz' with prefix 'foo/bar/biz/baz'");
 
-    await client.FooBarBizBaz.write(keyName, JSON.stringify({foo: 'bar'}));
+    await client.FooBarBizBaz.write(keyName, {
+      baz1: 'value1', baz2: 'value2', baz3: 'value3'
+    });
 
     console.log(`Created: ${keyName}`);
 
