@@ -16,9 +16,13 @@ Run [Mocha](https://mochajs.org) unit tests:
 
     $ npm run test
 
+Run the [example](https://github.com/nuxy/s3-is-not-a-db/tree/master/example) as a single process:
+
+    $ npm run example-single
+
 Run the [example](https://github.com/nuxy/s3-is-not-a-db/tree/master/example) concurrently:
 
-    $ npm run parallel
+    $ npm run example-parallel
 
 ## Versioning
 
@@ -30,7 +34,7 @@ This package is distributed in the hope that it will be useful, but without any 
 
 _s3-is-not-a-db_ is provided under the terms of the [MIT license](http://www.opensource.org/licenses/mit-license.php)
 
-[AWS](https://aws.amazon.com) is a registered trademark of Amazon Web Services, Inc.
+[Amazon S3](https://aws.amazon.com/s3) is a registered trademark of Amazon Web Services, Inc.
 
 ## Author
 
