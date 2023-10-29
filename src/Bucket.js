@@ -29,7 +29,6 @@ const {
  *   ..
  *
  * const storage = new Storage();
- *
  * const client = storage.config({
  *   bucket: 's3-is-not-a-db',
  *   region: 'us-east-1'
