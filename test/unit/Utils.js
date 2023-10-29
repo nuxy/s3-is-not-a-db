@@ -9,6 +9,18 @@ const Utils = require(`${PACKAGE_ROOT}/src/Utils.js`);
 
 describe('Utils module', function() {
   describe('Static methods', function() {
+    describe('compareArrays', function() {
+      const result1 = Utils.compareArrays();
+      const result2 = Utils.compareArrays(['foo','bar','biz'], ['foo','bar','biz']);
+      const result3 = Utils.compareArrays(['bar','biz','foo'], ['foo','bar','biz']);
+
+      it('should return value', function() {
+        expect(result1).to.be.false;
+        expect(result2).to.be.true;
+        expect(result3).to.be.true;
+      });
+    });
+
     describe('genRandomStr', function() {
       const result1 = Utils.genRandomStr();
       const result2 = Utils.genRandomStr(16);
@@ -21,6 +33,20 @@ describe('Utils module', function() {
 
       it('should not return value', function() {
         expect(result3).to.be.undefined;
+      });
+    });
+
+    describe('isObject', function() {
+      const result1 = Utils.isObject();
+      const result2 = Utils.isObject('foo');
+      const result3 = Utils.isObject(['foo']);
+      const result4 = Utils.isObject({foo: 'bar'});
+
+      it('should return value', function() {
+        expect(result1).to.be.false;
+        expect(result2).to.be.false;
+        expect(result3).to.be.false;
+        expect(result4).to.be.true;
       });
     });
 

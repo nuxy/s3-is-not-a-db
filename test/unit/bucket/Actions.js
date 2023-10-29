@@ -19,12 +19,21 @@ afterEach(() => {
 describe('BucketActions', function() {
   const bucket     = 's3-is-not-a-db';
   const region     = 'us-east-1';
+  const dataFields = ['foo1', 'foo2', 'foo3'];
   const prefixPath = '/path/to/object';
   const actions    = new Actions(bucket, region);
 
+  actions.dataFields = dataFields;
   actions.prefixPath = prefixPath;
 
   describe('Getters/Setters', function() {
+    describe('dataFields', function() {
+      it('should return value', function() {
+        expect(actions.dataFields).to.be.an('array');
+        expect(actions.dataFields).to.equal(dataFields);
+      });
+    });
+
     describe('prefixPath', function() {
       it('should return value', function() {
         expect(actions.prefixPath).to.be.an('string');
@@ -85,15 +94,19 @@ describe('BucketActions', function() {
     });
 
     describe('write', function() {
-      it('should resolve Promise', function() {
+      it('should resolve Promise', async function() {
         sinon.stub(Client.prototype, 'write').resolves();
 
-        const result = actions.write('keyName', 'foo');
+        const result1 = actions.write('keyName', 'foo');
+        const result2 = actions.write('keyName', {foo1: 'bar1', foo2: 'bar2', foo3: 'bar3'});
+        const result3 = actions.write('keyName', Buffer.from(''), 'image/jpeg; charset=utf-8');
 
-        return expect(result).to.eventually.be.undefined;
+        await expect(result1).to.eventually.be.undefined;
+        await expect(result2).to.eventually.be.undefined;
+        await expect(result3).to.eventually.be.undefined;
       });
 
-      it('should resolve Error', async function() {
+      it('should resolve Error (locked)', async function() {
         actions.lockObject('keyName');
 
         sinon.stub(Actions.prototype, 'isLocked').resolves(true);
@@ -101,6 +114,12 @@ describe('BucketActions', function() {
         const result = actions.write('keyName', 'foo');
 
         return expect(result).to.be.rejectedWith(Error, /Lock exists for/);
+      });
+
+      it('should resolve Error (invalid)', async function() {
+        const result = actions.write('keyName', {foo: 'bar', biz: 'baz'});
+
+        return expect(result).to.be.rejectedWith(Error, /Invalid Model data/);
       });
     });
 

@@ -4,6 +4,35 @@
 const Utils = this;
 
 /**
+ * Compare two arrays of strings.
+ *
+ * @param {Array} arr1
+ *   Array one.
+ *
+ * @param {Array} arr2
+ *   Array two.
+ *
+ * @return {Boolean}
+ *
+ * @example
+ * const result = Utils.compareArrays(
+ *   ['foo','bar','biz'],
+ *   ['bar','qux','baz']
+ * );
+ * // false
+ */
+exports.compareArrays = function(arr1, arr2) {
+  if (Array.isArray(arr1) && Array.isArray(arr2) && arr1.length === arr2.length) {
+    arr1.sort();
+    arr2.sort();
+
+    return arr1.every((item, index) => item === arr2[index]);
+  }
+
+  return false;
+};
+
+/**
  * Generate a pseudo-random string.
  *
  * @param {Number} len
@@ -12,7 +41,7 @@ const Utils = this;
  * @return {String|undefined}
  *
  * @example
- * consr result = Utils.genRandomStr(10);
+ * const result = Utils.genRandomStr(10);
  */
 exports.genRandomStr = function(len = 32) {
   let chars = 'abcdefghjkmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ23456789'
@@ -37,6 +66,22 @@ exports.genRandomStr = function(len = 32) {
   }
 
   return str || undefined;
+};
+
+/**
+ * Check if value is an Object instance.
+ *
+ * @param {Object}
+ *   Object to check.
+ *
+ * @return {Boolean}
+ *
+ * @example
+ * const result = Utils.isObject({foo: 'bar'});
+ * // true
+ */
+exports.isObject = function(value) {
+  return typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]';
 };
 
 /**

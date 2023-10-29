@@ -26,7 +26,7 @@ const {
  *   models = [modelFoo, modelBar];
  * }
  *
- * ..
+ *   ..
  *
  * const storage = new Storage();
  *
@@ -49,6 +49,7 @@ class Bucket {
       if (model instanceof Model) {
         const actions = new Actions(opts.bucket, opts.region);
 
+        actions.dataFields = model.fields;
         actions.prefixPath = (new Prefix(model)).path();
 
         Object.freeze(actions);

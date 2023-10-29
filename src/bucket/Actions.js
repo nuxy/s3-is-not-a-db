@@ -13,6 +13,7 @@ const {
  */
 class BucketActions {
   #client;
+  #dataFields;
   #prefixPath;
   #lockOwner;
 
@@ -31,13 +32,21 @@ class BucketActions {
   }
 
   // Getters.
+  get dataFields() {
+    return this.#dataFields;
+  }
+
   get prefixPath() {
     return this.#prefixPath;
   }
 
   // Setters.
-  set prefixPath(keyName) {
-    this.#prefixPath = keyName;
+  set dataFields(value) {
+    this.#dataFields = value;
+  }
+
+  set prefixPath(value) {
+    this.#prefixPath = value;
   }
 
   /**
@@ -107,18 +116,37 @@ class BucketActions {
    *   Object data.
    *
    * @param {String} contentType
-   *   Object content type (optional).
+   *   Object content type (default: 'text/plain')
    *
    * @return {Promise<Object|Error>}
    *
    * @example
    * actions.prefix = 'path/to/object';
    *
-   * await actions.write('keyName', 'foo', 'text/plain');
+   * await actions.write('keyName', 'foo');
+   *   ..
+   *
+   * await actions.write('keyName', {foo1: 'bar'});
+   *   ..
+   *
+   * await actions.write('keyName', <Buffer>, 'image/jpeg; charset=utf-8');
    */
-  async write(keyName, data, contentType) {
+  async write(keyName, data, contentType = 'text/plain') {
     if (!this.lockOwner && await this.isLocked(keyName)) {
       throwError('OBJECT_LOCK_EXISTS', keyName);
+    }
+
+    if (Utils.isObject(data)) {
+
+      // Validate object keys.
+      if (!this.isValidData(data)) {
+        throwError('INVALID_MODEL_DATA', data);
+      }
+
+      contentType = 'application/json';
+
+      // Convert object to JSON
+      data = JSON.stringify(data);
     }
 
     return await this.#client.write(`${this.#prefixPath}/${keyName}`, data, contentType);
@@ -295,6 +323,21 @@ class BucketActions {
     if (data) {
       await this.delete(keyName);
     }
+  }
+
+  /**
+   * Check object keys match Model fields.
+   *
+   * @param {Object} obj
+   *   Data as object.
+   *
+   * @return {Boolean}
+   *
+   * @example
+   * const result = actions.isValidData({foo: true, bar: false});
+   */
+  isValidData(obj) {
+    return Utils.compareArrays(this.#dataFields, Object.keys(obj));
   }
 }
 
