@@ -29,15 +29,23 @@ const client = storage.config({
       foo1: 'value1', foo2: 'value2', foo3: 'value3'
     });
 
-    console.log(`Created: ${keyName}`);
+    console.log(`  Created: ${keyName}`);
 
     data = await client.Foo.fetch(keyName);
 
-    console.log(`Found: ${JSON.stringify(data)}`);
+    console.log(`  Result: ${JSON.stringify(data)}`);
+
+    await client.Foo.write(keyName, {...data, foo1: 'newValue'});
+
+    console.log(`  Updated: ${keyName}`);
+
+    data = await client.Foo.fetch(keyName);
+
+    console.log(`  Result: ${JSON.stringify(data)}`);
 
     await client.Foo.delete(keyName);
 
-    console.log(`Removed: ${keyName}`);
+    console.log(`  Removed: ${keyName}`);
 
     if (!await client.Foo.fetch(keyName)) {
       console.log('Complete\n');
@@ -59,15 +67,23 @@ const client = storage.config({
       bar1: 'value1', bar2: 'value2', bar3: 'value3'
     });
 
-    console.log(`Created: ${keyName}`);
+    console.log(`  Created: ${keyName}`);
 
     data = await client.FooBar.fetch(keyName);
 
-    console.log(`Found: ${JSON.stringify(data)}`);
+    console.log(`  Result: ${JSON.stringify(data)}`);
+
+    await client.FooBar.write(keyName, {...data, bar1: 'newValue'});
+
+    console.log(`  Updated: ${keyName}`);
+
+    data = await client.FooBar.fetch(keyName);
+
+    console.log(`  Result: ${JSON.stringify(data)}`);
 
     await client.FooBar.delete(keyName);
 
-    console.log(`Removed: ${keyName}`);
+    console.log(`  Removed: ${keyName}`);
 
     if (!await client.FooBar.fetch(keyName)) {
       console.log('Complete\n');
@@ -89,15 +105,23 @@ const client = storage.config({
       biz1: 'value1', biz2: 'value2', biz3: 'value3'
     });
 
-    console.log(`Created: ${keyName}`);
+    console.log(`  Created: ${keyName}`);
 
     data = await client.FooBarBiz.fetch(keyName);
 
-    console.log(`Found: ${JSON.stringify(data)}`);
+    console.log(`  Result: ${JSON.stringify(data)}`);
+
+    await client.FooBarBiz.write(keyName, {...data, biz1: 'newValue'});
+
+    console.log(`  Updated: ${keyName}`);
+
+    data = await client.FooBarBiz.fetch(keyName);
+
+    console.log(`  Result: ${JSON.stringify(data)}`);
 
     await client.FooBarBiz.delete(keyName);
 
-    console.log(`Removed: ${keyName}`);
+    console.log(`  Removed: ${keyName}`);
 
     if (!await client.FooBarBiz.fetch(keyName)) {
       console.log('Complete\n');
@@ -119,15 +143,23 @@ const client = storage.config({
       baz1: 'value1', baz2: 'value2', baz3: 'value3'
     });
 
-    console.log(`Created: ${keyName}`);
+    console.log(`  Created: ${keyName}`);
 
     data = await client.FooBarBizBaz.fetch(keyName);
 
-    console.log(`Found: ${JSON.stringify(data)}`);
+    console.log(`  Result: ${JSON.stringify(data)}`);
+
+    await client.FooBarBizBaz.write(keyName, {...data, baz1: 'newValue'});
+
+    console.log(`  Updated: ${keyName}`);
+
+    data = await client.FooBarBizBaz.fetch(keyName);
+
+    console.log(`  Result: ${JSON.stringify(data)}`);
 
     await client.FooBarBizBaz.delete(keyName);
 
-    console.log(`Removed: ${keyName}`);
+    console.log(`  Removed: ${keyName}`);
 
     if (!await client.FooBarBizBaz.fetch(keyName)) {
       console.log('Complete\n');
