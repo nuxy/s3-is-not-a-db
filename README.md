@@ -4,6 +4,40 @@
 
 Simple interface to using [Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) as a database. :warning: Work In Progress :warning:
 
+## Usage
+
+```javascript
+// Model: Foo (Prefix root)
+const modelFoo = new Model('foo');
+modelFoo.parent = null;
+modelFoo.fields = ['foo1', 'foo2', 'foo3'];
+
+// Model: FooBar (relationship)
+const modelBar = new Model('bar');
+modelBar.parent = modelFoo;
+modelBar.fields = ['bar1', 'bar2', 'bar3'];
+
+class Storage extends Bucket {
+  models = [modelFoo, modelBar];
+}
+
+  ..
+
+const storage = new Storage();
+const client = storage.config({
+  bucket: 's3-is-not-a-db',
+  region: 'us-east-1'
+});
+
+// Prefix: <Bucket>/foo/<Object>
+const data = client.Foo.fetch('00112233-4455-6677-8899-aabbccddeeff');
+client.Foo.write('00112233-4455-6677-8899-aabbccddeeff', {...data, foo1: 'newValue'});
+
+// Prefix: <Bucket>/foo/bar/<Object>
+const data = client.FooBar.fetch('00112233-4455-6677-8899-aabbccddeeff');
+client.FooBar.write('00112233-4455-6677-8899-aabbccddeeff', {...data, bar2: 'newValue'});
+```
+
 ## Developers
 
 ### CLI options
