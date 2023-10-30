@@ -4,6 +4,7 @@ jobs:
       node_js:
         - "16"
       install:
+        - curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C .
         - npm install
       script:
         - npm run lint
