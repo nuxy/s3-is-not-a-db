@@ -112,7 +112,14 @@ class BucketActions {
       throwError('OBJECT_LOCK_EXISTS', keyName);
     }
 
-    return await this.#client.fetch(`${this.#prefixPath}/${keyName}`);
+    let data = await this.#client.fetch(`${this.#prefixPath}/${keyName}`);
+
+    if (data && this.#dataFields) {
+      const json = await data.transformToString();
+      data = JSON.parse(json);
+    }
+
+    return data;
   }
 
   /**
@@ -145,7 +152,7 @@ class BucketActions {
       throwError('OBJECT_LOCK_EXISTS', keyName);
     }
 
-    if (Utils.isObject(data)) {
+    if (this.#dataFields && Utils.isObject(data)) {
 
       // Validate object keys.
       if (!this.isValidData(data)) {
@@ -222,15 +229,12 @@ class BucketActions {
    *
    *   // Fetch the object.
    *   operations.push(() => {
-   *     return actions.fetch(keyName)
-   *       .then(JSON.parse);
+   *     return actions.fetch(keyName);
    *   });
    *
    *   // Update existing data.
    *   operations.push(data => {
-   *     return actions.write(keyName,
-   *       JSON.stringify({...data, foo: 'bar'})
-   *     );
+   *     return actions.write(keyName, {...data, foo: 'bar'}));
    *   });
    *
    *   actions.batch(keyName, operations)

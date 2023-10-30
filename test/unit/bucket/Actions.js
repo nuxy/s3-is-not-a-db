@@ -75,11 +75,13 @@ describe('BucketActions', function() {
 
     describe('fetch', async function() {
       it('should resolve Promise', function() {
-        sinon.stub(Client.prototype, 'fetch').resolves('data');
+        sinon.stub(Client.prototype, 'fetch').resolves({
+          transformToString: () => '{"foo":"bar"}'
+        });
 
         const result = actions.fetch('keyName');
 
-        return expect(result).to.eventually.be.equal('data');
+        return expect(result).to.eventually.be.deep.equal({foo: 'bar'});
       });
 
       it('should resolve Error', async function() {
@@ -159,24 +161,25 @@ describe('BucketActions', function() {
 
       // Fetch the object.
       operations.push(() => {
-        return actions.fetch(keyName)
-          .then(JSON.parse);
-        });
+        return actions.fetch(keyName);
+      });
 
       // Update existing data.
       operations.push(data => {
-        return actions.write(keyName,
-          JSON.stringify({...data, biz: 'baz'})
-        );
+        return actions.write(keyName, {...data, foo1: 'baz'});
       });
 
       it('should resolve Promise', async function() {
-        const json1 = '{"foo":"bar"}';
-        const json2 = '{"foo":"bar","biz":"baz"}';
+        const json1 = '{"foo1":"bar1","foo2":"bar2","foo3":"bar3"}';
+        const json2 = '{"foo1":"bar1","foo2":"bar2","foo3":"bar3"}';
 
         const callback = sinon.stub(Client.prototype, 'fetch');
-        callback.onCall(0).resolves(json1);
-        callback.onCall(1).resolves(json2);
+        callback.onCall(0).resolves({
+          transformToString: () => json1
+        });
+        callback.onCall(1).resolves({
+          transformToString: () => json2
+        });
 
         sinon.stub(Client.prototype, 'write').resolves();
 
@@ -184,7 +187,7 @@ describe('BucketActions', function() {
 
         const result = actions.fetch(keyName);
 
-        return expect(result).to.eventually.equal(json2);
+        return expect(result).to.eventually.deep.equal(JSON.parse(json2));
       });
 
       it('should resolve Error (methods)', async function() {

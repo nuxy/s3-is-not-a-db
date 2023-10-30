@@ -33,7 +33,7 @@ const client = storage.config({
 
     data = await client.Foo.fetch(keyName);
 
-    console.log(`Found: ${await data.transformToString()}`);
+    console.log(`Found: ${JSON.stringify(data)}`);
 
     await client.Foo.delete(keyName);
 
@@ -63,9 +63,9 @@ const client = storage.config({
 
     data = await client.FooBar.fetch(keyName);
 
-    console.log(`Found: ${await data.transformToString()}`);
+    console.log(`Found: ${JSON.stringify(data)}`);
 
-    await client.Bar.delete(keyName);
+    await client.FooBar.delete(keyName);
 
     console.log(`Removed: ${keyName}`);
 
@@ -93,7 +93,7 @@ const client = storage.config({
 
     data = await client.FooBarBiz.fetch(keyName);
 
-    console.log(`Found: ${await data.transformToString()}`);
+    console.log(`Found: ${JSON.stringify(data)}`);
 
     await client.FooBarBiz.delete(keyName);
 
@@ -123,7 +123,7 @@ const client = storage.config({
 
     data = await client.FooBarBizBaz.fetch(keyName);
 
-    console.log(`Found: ${await data.transformToString()}`);
+    console.log(`Found: ${JSON.stringify(data)}`);
 
     await client.FooBarBizBaz.delete(keyName);
 
