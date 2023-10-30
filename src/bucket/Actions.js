@@ -224,23 +224,23 @@ class BucketActions {
    * @return {Promise|Error}
    *
    * @example
-   *   const keyName = 'file.json';
-   *   const operations = [];
+   * const keyName = 'file.json';
+   * const operations = [];
    *
-   *   // Fetch the object.
-   *   operations.push(() => {
-   *     return actions.fetch(keyName);
+   * // Fetch the object.
+   * operations.push(() => {
+   *   return actions.fetch(keyName);
+   * });
+   *
+   * // Update existing data.
+   * operations.push(data => {
+   *   return actions.write(keyName, {...data, foo: 'bar'}));
+   * });
+   *
+   * actions.batch(keyName, operations)
+   *   .catch(function(err) {
+   *     console.warn(err.message);
    *   });
-   *
-   *   // Update existing data.
-   *   operations.push(data => {
-   *     return actions.write(keyName, {...data, foo: 'bar'}));
-   *   });
-   *
-   *   actions.batch(keyName, operations)
-   *     .catch(function(err) {
-   *       console.warn(err.message);
-   *     });
    */
   async batch(keyName, actions) {
 
