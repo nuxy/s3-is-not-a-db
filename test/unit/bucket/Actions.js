@@ -173,13 +173,9 @@ describe('BucketActions', function() {
         const json1 = '{"foo1":"bar1","foo2":"bar2","foo3":"bar3"}';
         const json2 = '{"foo1":"bar1","foo2":"bar2","foo3":"bar3"}';
 
-        const callback = sinon.stub(Client.prototype, 'fetch');
-        callback.onCall(0).resolves({
-          transformToString: () => json1
-        });
-        callback.onCall(1).resolves({
-          transformToString: () => json2
-        });
+        sinon.stub(Client.prototype, 'fetch')
+          .onCall(0).resolves({transformToString: () => json1})
+          .onCall(1).resolves({transformToString: () => json2});
 
         sinon.stub(Client.prototype, 'write').resolves();
 
@@ -204,8 +200,8 @@ describe('BucketActions', function() {
       it('should resolve Error (operations)', function() {
         const json = '{"foo":"bar"}';
 
-        const callback = sinon.stub(Client.prototype, 'fetch');
-        callback.onCall(0).resolves(json);
+        sinon.stub(Client.prototype, 'fetch')
+          .onCall(0).resolves(json);
 
         sinon.stub(Client.prototype, 'write').rejects();
 
@@ -225,21 +221,18 @@ describe('BucketActions', function() {
 
     describe('isLocked', function() {
       it('should resolve Promise', async function() {
-        const callback = sinon.stub(Actions.prototype, 'exists');
-
-        callback.onCall(0).resolves(false);
+        sinon.stub(Actions.prototype, 'exists')
+          .onCall(0).resolves(false)
+          .onCall(1).resolves({})
+          .onCall(2).resolves({Metadata:{ownerId: 'abcdef123456'}});
 
         const result1 = actions.isLocked('keyName');
 
         expect(result1).to.eventually.be.false;
 
-        callback.onCall(1).resolves({});
-
         const result2 = actions.isLocked('keyName');
 
         expect(result2).to.eventually.be.true;
-
-        callback.onCall(2).resolves({Metadata:{ownerId: 'abcdef123456'}});
 
         const result3 = actions.isLocked('keyName');
 
