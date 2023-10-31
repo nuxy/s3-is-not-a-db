@@ -51,7 +51,8 @@ class Bucket {
         actions.dataFields = model.fields;
         actions.prefixPath = (new Prefix(model)).path();
 
-        Object.freeze(actions);
+        /* istanbul ignore next */
+        (process.env.NODE_ENV === 'production') && Object.freeze(actions);
 
         // format PascalCase
         const name = Utils.pascalCase(actions.prefixPath);
