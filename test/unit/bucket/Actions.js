@@ -84,6 +84,14 @@ describe('BucketActions', function() {
         return expect(result).to.eventually.be.deep.equal({foo: 'bar'});
       });
 
+      it('should resolve Promise (undefined)', async function() {
+        sinon.stub(Client.prototype, 'fetch').resolves();
+
+        const result = actions.fetch('keyName');
+
+        return expect(result).to.eventually.be.undefined;
+      });
+
       it('should resolve Error', async function() {
         actions.lockObject('keyName');
 
