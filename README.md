@@ -58,6 +58,12 @@ Run the [example](https://github.com/nuxy/s3-is-not-a-db/tree/master/example) co
 
     $ npm run example-parallel
 
+## References
+
+- [Amazon Simple Storage Service quotas](https://docs.aws.amazon.com/general/latest/gr/s3.html#limits_s3)
+- [Organizing objects using prefixes](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-prefixes.html)
+- [Record locking (Pessimistic control)](https://en.wikipedia.org/wiki/Record_locking)
+
 ## Versioning
 
 This package is maintained under the [Semantic Versioning](https://semver.org) guidelines.
