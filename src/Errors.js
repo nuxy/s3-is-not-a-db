@@ -1,3 +1,5 @@
+/** @module Errors */
+
 /**
  *  S3 is NOT a DB
  *  Simple interface to using Amazon S3 as a database.
