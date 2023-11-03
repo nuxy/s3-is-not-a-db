@@ -19,14 +19,23 @@ afterEach(() => {
 describe('BucketActions', function() {
   const bucket     = 's3-is-not-a-db';
   const region     = 'us-east-1';
+  const name       = 'BucketActions';
   const dataFields = ['foo1', 'foo2', 'foo3'];
   const prefixPath = '/path/to/object';
   const actions    = new Actions(bucket, region);
 
+  actions.name       = name;
   actions.dataFields = dataFields;
   actions.prefixPath = prefixPath;
 
   describe('Getters/Setters', function() {
+    describe('name', function() {
+      it('should return value', function() {
+        expect(actions.name).to.be.an('string');
+        expect(actions.name).to.equal(name);
+      });
+    });
+
     describe('dataFields', function() {
       it('should return value', function() {
         expect(actions.dataFields).to.be.an('array');

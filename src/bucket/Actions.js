@@ -22,6 +22,7 @@ const {
  */
 class BucketActions {
   #client;
+  #name;
   #dataFields;
   #prefixPath;
   #lockOwner;
@@ -41,6 +42,10 @@ class BucketActions {
   }
 
   // Getters.
+  get name() {
+    return this.#name;
+  }
+
   get dataFields() {
     return this.#dataFields;
   }
@@ -50,6 +55,10 @@ class BucketActions {
   }
 
   // Setters.
+  set name(value) {
+    this.#name = value;
+  }
+
   set dataFields(value) {
     this.#dataFields = value;
   }
@@ -116,6 +125,7 @@ class BucketActions {
 
     if (data && this.#dataFields) {
       const json = await data.transformToString();
+
       data = JSON.parse(json);
     }
 
@@ -156,7 +166,7 @@ class BucketActions {
 
       // Validate object keys.
       if (!this.isValidData(data)) {
-        throwError('INVALID_MODEL_DATA', data);
+        throwError('INVALID_MODEL_DATA', this.#name);
       }
 
       contentType = 'application/json';
