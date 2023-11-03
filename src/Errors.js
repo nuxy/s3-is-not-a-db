@@ -13,7 +13,7 @@
 
 const messages = {
   INVALID_BUCKET_PREFIX: 'Invalid Bucket Prefix: %s',
-  INVALID_MODEL_DATA:    'Invalid Model data: %s',
+  INVALID_MODEL_DATA:    "Invalid Model data in '%s'",
   INVALID_MODEL_TYPE:    'Invalid Model type: %s',
   INVALID_OBJECT_TARGET: 'Invalid Object target: %s',
   INVALID_MESSAGE_CODE:  'Invalid message code',
