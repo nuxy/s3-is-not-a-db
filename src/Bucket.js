@@ -54,11 +54,10 @@ class Bucket {
         /* istanbul ignore next */
         (process.env.NODE_ENV === 'production') && Object.freeze(actions);
 
-        // format PascalCase
-        const name = Utils.pascalCase(actions.prefixPath);
+        actions.name = Utils.pascalCase(actions.prefixPath);
 
         // Define property (instance of Actions).
-        this[name] = actions;
+        this[actions.name] = actions;
 
       } else {
         throwError('INVALID_MODEL_TYPE', typeof model);
