@@ -222,6 +222,7 @@ class Client {
         Key: value,
         Body: data,
         ContentType: options?.contentType,
+        ContentLength: (data) ? Buffer.from(data).size : 0,
         Metadata: options?.metaData,
       });
 
