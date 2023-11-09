@@ -166,7 +166,9 @@ class BucketActions {
 
       // Validate object keys.
       if (!this.isValidData(data)) {
-        throwError('INVALID_MODEL_DATA', this.#name);
+        const keyDiff = `${Object.keys(data)} <> ${this.#dataFields}`;
+
+        throwError('INVALID_MODEL_FIELDS', keyDiff, this.#name);
       }
 
       contentType = 'application/json';

@@ -138,7 +138,7 @@ describe('BucketActions', function() {
       it('should resolve Error (invalid)', async function() {
         const result = actions.write('keyName', {foo: 'bar', biz: 'baz'});
 
-        return expect(result).to.be.rejectedWith(Error, /Invalid Model data/);
+        return expect(result).to.be.rejectedWith(Error, /Invalid Model fields/);
       });
     });
 
