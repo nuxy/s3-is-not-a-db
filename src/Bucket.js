@@ -60,7 +60,7 @@ class Bucket {
         this[actions.name] = actions;
 
       } else {
-        throwError('INVALID_MODEL_TYPE', typeof model);
+        throwError('INVALID_MODEL_OBJECT', typeof model);
       }
     });
 

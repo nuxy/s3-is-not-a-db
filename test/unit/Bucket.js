@@ -62,7 +62,7 @@ describe('Bucket', function() {
           });
         };
 
-        expect(result).to.throw('Invalid Model type: string');
+        expect(result).to.throw('Invalid Model object: string');
       });
     });
   });
