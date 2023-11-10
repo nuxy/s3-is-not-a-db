@@ -16,6 +16,7 @@ class BucketModel {
   #name;
   #parent;
   #fields;
+  #type;
   #index = 0;
 
   /**
@@ -31,6 +32,7 @@ class BucketModel {
     this.#name   = name;
     this.#parent = null;
     this.#fields = null;
+    this.#type   = null;
 
     this._init(name);
   }
@@ -55,6 +57,10 @@ class BucketModel {
     return this.#fields;
   }
 
+  get type() {
+    return this.#type;
+  }
+
   get index() {
     return this.#index;
   }
@@ -76,6 +82,13 @@ class BucketModel {
   set fields(arr) {
     if (BucketModel.isValidFields(arr)) {
       this.#fields = arr;
+      this.#type = 'json';
+    }
+  }
+
+  set type(value) {
+    if (BucketModel.isValidType(value)) {
+      this.#type = value;
     }
   }
 
@@ -122,6 +135,21 @@ class BucketModel {
    */
   static isValidFields(arr) {
     return Array.isArray(arr) && arr.every(item => typeof item === 'string');
+  }
+
+  /**
+   * Verify the Modal output type.
+   *
+   * @param {String} value
+   *  Check type value (options: base64|blob|json|text)
+   *
+   * @return {Boolean}
+   *
+   * @example
+   * const result = BucketModel.isValidType('json');
+   */
+  static isValidType(value) {
+    return ['base64', 'blob', 'json', 'text'].includes(value);
   }
 }
 

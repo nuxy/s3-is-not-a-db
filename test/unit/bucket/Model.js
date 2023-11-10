@@ -61,6 +61,23 @@ describe('BucketModel', function() {
       });
     });
 
+    describe('type', function() {
+      it('should return value', function() {
+        const modelFoo = new Model('foo');
+        modelFoo.type = 'text';
+
+        expect(modelFoo.type).to.be.an('string');
+        expect(modelFoo.type).to.equal('text');
+      });
+
+      it('should be null', function() {
+        const modelFoo = new Model('foo');
+        modelFoo.type = 'invalid';
+
+        expect(modelFoo.fields).to.be.null;
+      });
+    });
+
     describe('index', function() {
       const modelFoo = new Model('Foo');
       modelFoo.parent = null;
@@ -137,6 +154,31 @@ describe('BucketModel', function() {
 
         expect(result3).to.be.an('boolean');
         expect(result3).to.be.false;
+      });
+    });
+
+    describe('isValidType', function() {
+      it('should return value', function() {
+        const result1 = Model.isValidType('base64');
+        const result2 = Model.isValidType('blob');
+        const result3 = Model.isValidType('json');
+        const result4 = Model.isValidType('text');
+        const result5 = Model.isValidType('invalid');
+
+        expect(result1).to.be.an('boolean');
+        expect(result1).to.be.true;
+
+        expect(result2).to.be.an('boolean');
+        expect(result2).to.be.true;
+
+        expect(result3).to.be.an('boolean');
+        expect(result3).to.be.true;
+
+        expect(result4).to.be.an('boolean');
+        expect(result4).to.be.true;
+
+        expect(result5).to.be.an('boolean');
+        expect(result5).to.be.false;
       });
     });
   });
