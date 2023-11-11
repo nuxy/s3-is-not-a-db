@@ -29,13 +29,54 @@ const client = storage.config({
   region: 'us-east-1'
 });
 
-// Prefix: <Bucket>/foo/<Object>
+// Prefix: <Bucket>/foo/00112233-4455-6677-8899-aabbccddeeff
 const data = await client.Foo.fetch('00112233-4455-6677-8899-aabbccddeeff');
 await client.Foo.write('00112233-4455-6677-8899-aabbccddeeff', {...data, foo1: 'newValue'});
 
-// Prefix: <Bucket>/foo/bar/<Object>
+// Prefix: <Bucket>/foo/bar/00112233-4455-6677-8899-aabbccddeeff
 const data = await client.FooBar.fetch('00112233-4455-6677-8899-aabbccddeeff');
 await client.FooBar.write('00112233-4455-6677-8899-aabbccddeeff', {...data, bar2: 'newValue'});
+```
+
+### Model properties
+
+In most cases you just need to instanciate your model using:
+
+```javascript
+const model = new Model('<Name>'); // Maps R/W operations to Prefix: <Bucket>/<Name>
+```
+
+In more complex cases you can _extend the model_ with the following **optional** properties:
+
+| Property | Description                                                  |
+|----------|--------------------------------------------------------------|
+| `name`   | The model name alternative to using `new Model('<Name>')`    |
+| `parent` | References the associated Model (nested relationship)        |
+| `fields` | Defines supported root-level `Object` keys in R/W operations |
+| `type`   | Supported types (`base64`, `binary`, `json` , `text`)        |
+
+#### Image example
+
+```javascript
+// Construct the model.
+const modelImage = new Model('image');
+modelImage.type = 'binary';
+
+  ..
+
+// Read image into TypedArray
+const data = Uint8Array.from(
+  Buffer.from(
+    fs.readFileSync('path/to/example.jpg')
+  )
+);
+
+await client.Image.write('example.jpg', data);
+
+const buffer = await client.Image.fetch('example.jpg');
+
+// Convert result to Base64 URL
+buffer.toString('base64url');
 ```
 
 ## Developers
