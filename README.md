@@ -30,12 +30,12 @@ const client = storage.config({
 });
 
 // Prefix: <Bucket>/foo/<Object>
-const data = client.Foo.fetch('00112233-4455-6677-8899-aabbccddeeff');
-client.Foo.write('00112233-4455-6677-8899-aabbccddeeff', {...data, foo1: 'newValue'});
+const data = await client.Foo.fetch('00112233-4455-6677-8899-aabbccddeeff');
+await client.Foo.write('00112233-4455-6677-8899-aabbccddeeff', {...data, foo1: 'newValue'});
 
 // Prefix: <Bucket>/foo/bar/<Object>
-const data = client.FooBar.fetch('00112233-4455-6677-8899-aabbccddeeff');
-client.FooBar.write('00112233-4455-6677-8899-aabbccddeeff', {...data, bar2: 'newValue'});
+const data = await client.FooBar.fetch('00112233-4455-6677-8899-aabbccddeeff');
+await client.FooBar.write('00112233-4455-6677-8899-aabbccddeeff', {...data, bar2: 'newValue'});
 ```
 
 ## Developers
