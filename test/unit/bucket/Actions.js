@@ -22,10 +22,12 @@ describe('BucketActions', function() {
   const name       = 'BucketActions';
   const dataFields = ['foo1', 'foo2', 'foo3'];
   const prefixPath = '/path/to/object';
+  const outputType = 'text';
   const actions    = new Actions(bucket, region);
 
   actions.name       = name;
   actions.dataFields = dataFields;
+  actions.outputType = outputType;
   actions.prefixPath = prefixPath;
 
   describe('Getters/Setters', function() {
@@ -40,6 +42,13 @@ describe('BucketActions', function() {
       it('should return value', function() {
         expect(actions.dataFields).to.be.an('array');
         expect(actions.dataFields).to.equal(dataFields);
+      });
+    });
+
+    describe('outputType', function() {
+      it('should return value', function() {
+        expect(actions.outputType).to.be.an('string');
+        expect(actions.outputType).to.equal(outputType);
       });
     });
 
@@ -82,15 +91,61 @@ describe('BucketActions', function() {
       });
     });
 
-    describe('fetch', async function() {
-      it('should resolve Promise', function() {
+    describe('fetch', function() {
+      it('should resolve Promise (base64)', function() {
+        actions.outputType = 'base64';
+
+        const output = Buffer.from('foo').toString('base64');
+
         sinon.stub(Client.prototype, 'fetch').resolves({
-          transformToString: () => '{"foo":"bar"}'
+          transformToString: () => output
+        });
+
+        const result = actions.fetch('keyName');
+
+        return expect(result).to.eventually.be.equal(output);
+      });
+
+      it('should resolve Promise (blob)', function() {
+        actions.outputType = 'blob';
+
+        const output = Buffer.from('foo');
+
+        sinon.stub(Client.prototype, 'fetch').resolves({
+          transformToByteArray: () => output
+        });
+
+        const result = actions.fetch('keyName');
+
+        return expect(result).to.eventually.be.equal(output);
+      });
+
+      it('should resolve Promise (json)', function() {
+        actions.outputType = 'json';
+
+        const output = '{"foo":"bar"}';
+
+        sinon.stub(Client.prototype, 'fetch').resolves({
+          transformToString: () => output
         });
 
         const result = actions.fetch('keyName');
 
         return expect(result).to.eventually.be.deep.equal({foo: 'bar'});
+      });
+
+      it('should resolve Promise (text)', function() {
+        actions.outputType = 'text';
+
+        const output = 'foo';
+
+        sinon.stub(Client.prototype, 'fetch').resolves({
+          transformToString: () => output
+        });
+
+        const result = actions.fetch('keyName');
+
+        return expect(result).to.eventually.be.equal(output);
       });
 
       it('should resolve Promise (undefined)', async function() {
@@ -195,6 +250,8 @@ describe('BucketActions', function() {
           .onCall(1).resolves({transformToString: () => json2});
 
         sinon.stub(Client.prototype, 'write').resolves();
+
+        actions.outputType = 'json';
 
         await actions.batch(keyName, operations);
 

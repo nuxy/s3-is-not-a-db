@@ -49,6 +49,7 @@ class Bucket {
         const actions = new Actions(opts.bucket, opts.region);
 
         actions.dataFields = model.fields;
+        actions.outputType = model.type;
         actions.prefixPath = (new Prefix(model)).path();
 
         /* istanbul ignore next */

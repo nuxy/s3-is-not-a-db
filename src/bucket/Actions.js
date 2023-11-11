@@ -24,6 +24,7 @@ class BucketActions {
   #client;
   #name;
   #dataFields;
+  #outputType;
   #prefixPath;
   #lockOwner;
 
@@ -50,6 +51,10 @@ class BucketActions {
     return this.#dataFields;
   }
 
+  get outputType() {
+    return this.#outputType;
+  }
+
   get prefixPath() {
     return this.#prefixPath;
   }
@@ -61,6 +66,10 @@ class BucketActions {
 
   set dataFields(value) {
     this.#dataFields = value;
+  }
+
+  set outputType(value) {
+    this.#outputType = value;
   }
 
   set prefixPath(value) {
@@ -121,15 +130,23 @@ class BucketActions {
       throwError('OBJECT_LOCK_EXISTS', keyName);
     }
 
-    let data = await this.#client.fetch(`${this.#prefixPath}/${keyName}`);
+    const data = await this.#client.fetch(`${this.#prefixPath}/${keyName}`);
 
-    if (data && this.#dataFields) {
-      const json = await data.transformToString();
+    if (data) {
+      switch (this.#outputType) {
+        case 'base64':
+          return await data.transformToString('base64');
 
-      data = JSON.parse(json);
+        case 'blob':
+          return await data.transformToByteArray();
+
+        case 'json':
+          return JSON.parse(await data.transformToString());
+
+        default:
+          return await data.transformToString();
+      }
     }
-
-    return data;
   }
 
   /**
