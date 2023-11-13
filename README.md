@@ -79,6 +79,12 @@ const buffer = await client.Image.fetch('example.jpg');
 buffer.toString('base64url');
 ```
 
+## For the impatient (TO DO)
+
+While [`batch`](https://github.com/nuxy/s3-is-not-a-db/blob/master/src/bucket/Actions.js#L274) processing works in a perfect environment a deadlock can occur anytime an exception is thrown in-between client operations.  For example, a network failure may result with an incomplete operation that results with an `<Object>.lock` that prevents write operations for new client instances (e.g. threaded application).
+
+I'm currently evaluating several solutions on how to handle this (the "Work in Progress").  If you **don't care about write integrity in a multi-user or threaded environment** all other [client methods](https://nuxy.github.io/s3-is-not-a-db) work as expected.
+
 ## Developers
 
 ### CLI options
