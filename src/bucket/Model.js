@@ -33,14 +33,15 @@ class BucketModel {
     this.#parent = null;
     this.#fields = null;
     this.#type   = null;
-
-    this._init(name);
+    this.#init(name);
   }
 
   /**
    * Set defaults.
+   *
+   * @private
    */
-  _init(name) {
+  #init(name) {
     this.name = name;
   }
 
