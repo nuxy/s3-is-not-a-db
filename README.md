@@ -4,6 +4,8 @@
 
 Simple interface to using [Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) as a database. :warning: Work In Progress :warning:
 
+Want to [use this](#for-the-impatient-to-do) in a **non-production** environment?
+
 ## Usage
 
 ```javascript
@@ -31,11 +33,19 @@ const client = storage.config({
 
 // Prefix: <Bucket>/foo/00112233-4455-6677-8899-aabbccddeeff
 const data = await client.Foo.fetch('00112233-4455-6677-8899-aabbccddeeff');
+// {foo1: <Value>, foo2: <Value>, foo3: <Value>}
+
 await client.Foo.write('00112233-4455-6677-8899-aabbccddeeff', {...data, foo1: 'newValue'});
+// {foo1: <Value>, foo2: <Value>, foo3: 'newValue'}
+
+  ..
 
 // Prefix: <Bucket>/foo/bar/00112233-4455-6677-8899-aabbccddeeff
 const data = await client.FooBar.fetch('00112233-4455-6677-8899-aabbccddeeff');
+// {bar1: <Value>, bar2: <Value>, bar3: <Value>}
+
 await client.FooBar.write('00112233-4455-6677-8899-aabbccddeeff', {...data, bar2: 'newValue'});
+// {bar1: <Value>, bar2: 'newValue', bar3: <Value>}
 ```
 
 ### Model properties
