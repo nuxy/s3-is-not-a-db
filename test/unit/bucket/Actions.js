@@ -80,7 +80,7 @@ describe('BucketActions', function() {
         return expect(result).to.eventually.be.undefined;
       });
 
-      it('should resolve Error', async function() {
+      it('should resolve Error', function() {
         actions.lockObject('keyName');
 
         sinon.stub(Actions.prototype, 'isLocked').resolves(true);
@@ -148,7 +148,7 @@ describe('BucketActions', function() {
         return expect(result).to.eventually.be.equal(output);
       });
 
-      it('should resolve Promise (undefined)', async function() {
+      it('should resolve Promise (undefined)', function() {
         sinon.stub(Client.prototype, 'fetch').resolves();
 
         const result = actions.fetch('keyName');
@@ -156,7 +156,7 @@ describe('BucketActions', function() {
         return expect(result).to.eventually.be.undefined;
       });
 
-      it('should resolve Error', async function() {
+      it('should resolve Error', function() {
         actions.lockObject('keyName');
 
         sinon.stub(Actions.prototype, 'isLocked').resolves(true);
@@ -168,19 +168,19 @@ describe('BucketActions', function() {
     });
 
     describe('write', function() {
-      it('should resolve Promise', async function() {
+      it('should resolve Promise', function() {
         sinon.stub(Client.prototype, 'write').resolves();
 
         const result1 = actions.write('keyName', 'foo');
         const result2 = actions.write('keyName', {foo1: 'bar1', foo2: 'bar2', foo3: 'bar3'});
         const result3 = actions.write('keyName', Buffer.from(''), 'image/jpeg; charset=utf-8');
 
-        await expect(result1).to.eventually.be.undefined;
-        await expect(result2).to.eventually.be.undefined;
-        await expect(result3).to.eventually.be.undefined;
+        expect(result1).to.eventually.be.undefined;
+        expect(result2).to.eventually.be.undefined;
+        expect(result3).to.eventually.be.undefined;
       });
 
-      it('should resolve Error (locked)', async function() {
+      it('should resolve Error (locked)', function() {
         actions.lockObject('keyName');
 
         sinon.stub(Actions.prototype, 'isLocked').resolves(true);
@@ -190,7 +190,7 @@ describe('BucketActions', function() {
         return expect(result).to.be.rejectedWith(Error, /Lock exists for/);
       });
 
-      it('should resolve Error (invalid)', async function() {
+      it('should resolve Error (invalid)', function() {
         const result = actions.write('keyName', {foo: 'bar', biz: 'baz'});
 
         return expect(result).to.be.rejectedWith(Error, /Invalid Model fields/);
@@ -206,7 +206,7 @@ describe('BucketActions', function() {
         return expect(result).to.eventually.be.undefined;
       });
 
-      it('should resolve Error', async function() {
+      it('should resolve Error', function() {
         actions.lockObject('keyName');
 
         sinon.stub(Actions.prototype, 'isLocked').resolves(true);
@@ -294,7 +294,7 @@ describe('BucketActions', function() {
     });
 
     describe('isLocked', function() {
-      it('should resolve Promise', async function() {
+      it('should resolve Promise', function() {
         sinon.stub(Actions.prototype, 'exists')
           .onCall(0).resolves(false)
           .onCall(1).resolves({})

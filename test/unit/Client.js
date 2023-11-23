@@ -158,29 +158,29 @@ describe('Client', function() {
         return expect(result).to.eventually.be.undefined;
       });
 
-      it('should resolve Error', async function() {
+      it('should resolve Error', function() {
         const result1 = client.rename('', '');
 
-        await expect(result1).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
+        expect(result1).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
 
         s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName1'}).resolves(true);
         s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName2'}).resolves(false);
 
         const result2 = client.rename('/path/to/keyName1', '');
 
-        await expect(result2).to.be.rejectedWith(Error, /Invalid Object target/);
+        expect(result2).to.be.rejectedWith(Error, /Invalid Object target/);
 
         s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName1'}).resolves(false);
         s3Client.on(HeadObjectCommand, {Key: '/path/to/keyName2'}).resolves(true);
 
         const result3 = client.rename('', '/path/to/keyName2');
 
-        await expect(result3).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
+        expect(result3).to.be.rejectedWith(Error, /Invalid Bucket Prefix/);
       });
     });
 
-    describe('exists', async function() {
-      it('should resolve Promise (data)', async function() {
+    describe('exists', function() {
+      it('should resolve Promise (data)', function() {
         s3Client.on(HeadObjectCommand).resolves({
           ETag: '686897696a7c876b7e',
           LastModified: 'Thu, 25 Oct 2023 00:00:00 GMT',
@@ -189,9 +189,9 @@ describe('Client', function() {
 
         const result = client.exists('/path/to/keyName');
 
-        await expect(result).to.eventually.have.property('ETag');
-        await expect(result).to.eventually.have.property('LastModified');
-        await expect(result).to.eventually.have.property('Metadata');
+        expect(result).to.eventually.have.property('ETag');
+        expect(result).to.eventually.have.property('LastModified');
+        expect(result).to.eventually.have.property('Metadata');
       });
 
       it('should resolve Promise (false)', function() {
