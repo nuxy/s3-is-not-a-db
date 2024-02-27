@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Simple interface to using Amazon S3 as a database.",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "gendoc": "jsdoc -d doc -r src",
     "lint": "eslint src test",
