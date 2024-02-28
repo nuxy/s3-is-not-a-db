@@ -1,6 +1,6 @@
 # S3 is NOT a DB
 
-[![Build Status](https://api.travis-ci.com/nuxy/s3-is-not-a-db.svg?branch=master)](https://app.travis-ci.com/github/nuxy/s3-is-not-a-db) [![Coverage](https://coveralls.io/repos/nuxy/s3-is-not-a-db/badge.svg?branch=master)](https://coveralls.io/r/nuxy/s3-is-not-a-db?branch=master)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/nuxy/s3-is-not-a-db/.github%2Fworkflows%2Fci.yml)](https://app.travis-ci.com/github/nuxy/s3-is-not-a-db) [![Coverage](https://coveralls.io/repos/nuxy/s3-is-not-a-db/badge.svg?branch=master)](https://coveralls.io/r/nuxy/s3-is-not-a-db?branch=master)
 
 Simple interface to using [Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) as a database. :warning: Work In Progress :warning:
 

@@ -1,0 +1,38 @@
+name: Tests / Code Coverage
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: ci
+    strategy:
+      matrix:
+        node-version: ['18.x', '20.x', '21.x']
+        python-version: ['3.9', '3.10', '3.11']
+    steps:
+      - uses: actions/checkout@v4
+
+      # Python environment
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Coveralls binary
+        run: curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C .
+      - name: Install pip dependencies
+        run: pip install semgrep
+
+      # Node.js environment
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install NPM dependencies
+        run: npm ci
+      - name: Run ESLint
+        run: npm run lint
+      - name: Run Mocha
+        run: npm run test
+      - name: Run Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: npm run coverage
