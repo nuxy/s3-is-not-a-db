@@ -45,8 +45,6 @@ class Client {
    * const client = new Client('s3-is-not-a-db', 'us-east-1');
    */
   constructor(bucket, region) {
-    this.#handle = null;
-
     this.#init(bucket, region);
   }
 
@@ -56,15 +54,12 @@ class Client {
   #init(bucket, region) {
     this.bucket = bucket;
     this.region = region;
+    this.#initHandler();
   }
 
   /**
    * Getters.
    */
-  get handle() {
-    return new S3Client({region: this.region});
-  }
-
   get bucket() {
     return this.#bucket;
   }
@@ -84,6 +79,13 @@ class Client {
     if (isValidRegion(value)) {
       this.#region = value;
     }
+  }
+
+  /**
+   * Initialize S3 client handler.
+   */
+  #initHandler() {
+    this.#handle = new S3Client({region: this.#region});
   }
 
   /**
@@ -112,7 +114,7 @@ class Client {
 
         while (isTruncated) {
           const {Contents, IsTruncated, NextContinuationToken}
-            = await this.handle.send(command);
+            = await this.#handle.send(command);
 
           contents.push(...Contents.map(content => content.Key));
 
@@ -151,7 +153,7 @@ class Client {
       });
 
       try {
-        return await this.handle.send(command);
+        return await this.#handle.send(command);
 
       } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
@@ -181,7 +183,7 @@ class Client {
       });
 
       try {
-        const response = await this.handle.send(command);
+        const response = await this.#handle.send(command);
 
         return await response.Body;
 
@@ -227,7 +229,7 @@ class Client {
       });
 
       try {
-        return await this.handle.send(command);
+        return await this.#handle.send(command);
 
       } catch (err) /* istanbul ignore next */ {
         console.warn(err.message);
@@ -288,7 +290,7 @@ class Client {
       });
 
       try {
-        return await this.handle.send(command);
+        return await this.#handle.send(command);
 
       } catch (err) /* istanbul ignore next */ {
         if (err.name !== 'NotFound') {
