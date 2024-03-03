@@ -1,11 +1,7 @@
-'use strict';
-
-const chai = require('chai');
-
-const expect = chai.expect;
+import {expect} from 'chai';
 
 // Load modules.
-const Utils = require(`${PACKAGE_ROOT}/src/Utils.js`);
+const Utils = await import(`${PACKAGE_ROOT}/src/Utils.js`);
 
 describe('Utils module', function() {
   describe('Static methods', function() {

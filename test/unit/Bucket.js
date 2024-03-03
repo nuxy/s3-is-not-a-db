@@ -1,13 +1,9 @@
-'use strict';
-
-const chai = require('chai');
-
-const expect = chai.expect;
+import {expect} from 'chai';
 
 // Load modules.
-const Bucket  = require(`${PACKAGE_ROOT}/src/Bucket`);
-const Actions = require(`${PACKAGE_ROOT}/src/bucket/Actions`);
-const Model   = require(`${PACKAGE_ROOT}/src/bucket/Model`);
+const Bucket  = (await import(`${PACKAGE_ROOT}/src/Bucket.js`)).default;
+const Actions = (await import(`${PACKAGE_ROOT}/src/bucket/Actions.js`)).default;
+const Model   = (await import(`${PACKAGE_ROOT}/src/bucket/Model.js`)).default;
 
 describe('Bucket', function() {
   describe('Instance methods', function() {

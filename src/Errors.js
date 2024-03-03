@@ -1,5 +1,3 @@
-/** @module Errors */
-
 /**
  *  S3 is NOT a DB
  *  Simple interface to using Amazon S3 as a database.
@@ -8,8 +6,6 @@
  *  Licensed under the MIT license:
  *  http://www.opensource.org/licenses/mit-license.php
  */
-
-'use default';
 
 const messages = {
   INVALID_BUCKET_PREFIX: 'Invalid Bucket Prefix: %s',
@@ -51,4 +47,4 @@ function throwError() {
   throw new Error(messages.INVALID_MESSAGE_CODE);
 }
 
-module.exports = {throwError};
+export {throwError};

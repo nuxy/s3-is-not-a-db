@@ -7,15 +7,16 @@
  *  http://www.opensource.org/licenses/mit-license.php
  */
 
-'use strict';
-
 // Local modules.
-const Client = require('../Client');
-const Utils  = require('../Utils');
+import Client from '../Client.js';
 
-const {
-  throwError
-} = require('../Errors');
+import {
+  compareArrays,
+  isObject,
+  genRandomStr,
+} from '../Utils.js';
+
+import {throwError} from '../Errors.js';
 
 /**
  * Provides bucket actions.
@@ -179,7 +180,7 @@ class BucketActions {
       throwError('OBJECT_LOCK_EXISTS', keyName);
     }
 
-    if (this.#dataFields && Utils.isObject(data)) {
+    if (this.#dataFields && isObject(data)) {
 
       // Validate object keys.
       if (!this.isValidData(data)) {
@@ -339,7 +340,7 @@ class BucketActions {
       throwError('OBJECT_LOCK_EXISTS', keyName);
     }
 
-    const ownerId = Utils.genRandomStr();
+    const ownerId = genRandomStr();
 
     await this.write(keyName, '', {metaData: {ownerId}});
 
@@ -379,8 +380,8 @@ class BucketActions {
    * const result = actions.isValidData({foo: true, bar: false});
    */
   isValidData(obj) {
-    return Utils.compareArrays(this.#dataFields, Object.keys(obj));
+    return compareArrays(this.#dataFields, Object.keys(obj));
   }
 }
 
-module.exports = BucketActions;
+export default BucketActions;

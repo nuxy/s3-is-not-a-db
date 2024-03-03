@@ -1,27 +1,23 @@
-'use strict';
-
-const {
+import {
   DeleteObjectCommand,
   GetObjectCommand,
   HeadObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client
-} = require('@aws-sdk/client-s3');
+} from '@aws-sdk/client-s3';
 
-const {mockClient} = require('aws-sdk-client-mock');
+import {mockClient} from 'aws-sdk-client-mock';
 
 const s3Client = mockClient(S3Client);
 
-const chai           = require('chai');
-const chaiAsPromised = require('chai-as-promised');
+import {use, expect}  from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 
-chai.use(chaiAsPromised);
-
-const expect = chai.expect;
+use(chaiAsPromised);
 
 // Load modules.
-const Client = require(`${PACKAGE_ROOT}/src/Client`);
+const Client = (await import(`${PACKAGE_ROOT}/src/Client.js`)).default;
 
 afterEach(() => {
   s3Client.reset();

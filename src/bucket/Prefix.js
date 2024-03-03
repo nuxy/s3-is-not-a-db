@@ -7,8 +7,6 @@
  *  http://www.opensource.org/licenses/mit-license.php
  */
 
-'use strict';
-
 /**
  * Provides methods to parse path parameters.
  */
@@ -110,4 +108,4 @@ class BucketPrefix {
   }
 }
 
-module.exports = BucketPrefix;
+export default BucketPrefix;

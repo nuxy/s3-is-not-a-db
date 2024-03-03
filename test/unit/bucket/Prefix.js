@@ -1,12 +1,8 @@
-'use strict';
-
-const chai = require('chai');
-
-const expect = chai.expect;
+import {expect} from 'chai';
 
 // Load modules.
-const Prefix = require(`${PACKAGE_ROOT}/src/bucket/Prefix`);
-const Model  = require(`${PACKAGE_ROOT}/src/bucket/Model`);
+const Prefix = (await import(`${PACKAGE_ROOT}/src/bucket/Prefix.js`)).default;
+const Model  = (await import(`${PACKAGE_ROOT}/src/bucket/Model.js`)).default;
 
 describe('BucketPrefix', function() {
 

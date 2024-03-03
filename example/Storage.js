@@ -1,7 +1,5 @@
-'use strict';
-
 // Local modules.
-const {Bucket, Model} = require('../');
+import {Bucket, Model} from '../';
 
 /**
  * Model 'Foo' maps to bucket prefix 'foo'
@@ -38,4 +36,4 @@ class Storage extends Bucket {
   models = [modelFoo, modelBar, modelBiz, modelBaz];
 }
 
-module.exports = Storage;
+export default Storage;

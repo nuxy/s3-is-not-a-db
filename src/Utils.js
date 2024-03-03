@@ -1,5 +1,3 @@
-/** @module Utils */
-
 /**
  *  S3 is NOT a DB
  *  Simple interface to using Amazon S3 as a database.
@@ -8,11 +6,6 @@
  *  Licensed under the MIT license:
  *  http://www.opensource.org/licenses/mit-license.php
  */
-
-'use strict';
-
-// Local reference.
-const Utils = this;
 
 /**
  * Compare two arrays of strings.
@@ -32,7 +25,7 @@ const Utils = this;
  * );
  * // false
  */
-exports.compareArrays = function(arr1, arr2) {
+export function compareArrays(arr1, arr2) {
   if (Array.isArray(arr1) && Array.isArray(arr2) && arr1.length === arr2.length) {
     arr1.sort();
     arr2.sort();
@@ -41,7 +34,7 @@ exports.compareArrays = function(arr1, arr2) {
   }
 
   return false;
-};
+}
 
 /**
  * Generate a pseudo-random string.
@@ -54,7 +47,7 @@ exports.compareArrays = function(arr1, arr2) {
  * @example
  * const result = Utils.genRandomStr(10);
  */
-exports.genRandomStr = function(len = 32) {
+export function genRandomStr(len = 32) {
   let chars = 'abcdefghjkmnopqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ23456789'
     .split('');
 
@@ -77,7 +70,7 @@ exports.genRandomStr = function(len = 32) {
   }
 
   return str || undefined;
-};
+}
 
 /**
  * Check if value is an Object instance.
@@ -91,9 +84,9 @@ exports.genRandomStr = function(len = 32) {
  * const result = Utils.isObject({foo: 'bar'});
  * // true
  */
-exports.isObject = function(value) {
+export function isObject(value) {
   return typeof value === 'object' && Object.prototype.toString.call(value) === '[object Object]';
-};
+}
 
 /**
  * Return Pascal Case formatted string.
@@ -107,7 +100,7 @@ exports.isObject = function(value) {
  * const result = Utils.pascalCase('foo-bar_BizBaz);
  * // FooBarBizBaz
  */
-exports.pascalCase = function(value) {
+export function pascalCase(value) {
   value = value.replace(/[^a-z-_ ]/gi, '-');
 
   let parts = value.split(/[-_ ]/g);
@@ -122,4 +115,4 @@ exports.pascalCase = function(value) {
   });
 
   return parts.join('');
-};
+}

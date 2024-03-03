@@ -1,11 +1,7 @@
-'use strict';
-
-const chai = require('chai');
-
-const expect = chai.expect;
+import {expect} from 'chai';
 
 // Load modules.
-const Model = require(`${PACKAGE_ROOT}/src/bucket/Model`);
+const Model = (await import(`${PACKAGE_ROOT}/src/bucket/Model.js`)).default;
 
 describe('BucketModel', function() {
   describe('Getters/Setters', function() {

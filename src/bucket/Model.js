@@ -7,8 +7,6 @@
  *  http://www.opensource.org/licenses/mit-license.php
  */
 
-'use strict';
-
 /**
  * Provides bucket data representation.
  */
@@ -154,4 +152,4 @@ class BucketModel {
   }
 }
 
-module.exports = BucketModel;
+export default BucketModel;

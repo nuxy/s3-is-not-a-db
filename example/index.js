@@ -1,9 +1,7 @@
-'use strict';
-
-const {v1: uuid} = require('uuid');
+import {v1 as uuid} from 'uuid';
 
 // Local modules.
-const Storage = require('./Storage');
+import Storage from './Storage.js';
 
 // Initialize client.
 const storage = new Storage();

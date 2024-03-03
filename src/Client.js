@@ -7,24 +7,18 @@
  *  http://www.opensource.org/licenses/mit-license.php
  */
 
-'use strict';
+import {BucketLocationConstraint} from '@aws-sdk/client-s3/dist-cjs/index.js';
 
-const {
-  BucketLocationConstraint
-} = require('@aws-sdk/client-s3/dist-cjs');
-
-const {
+import {
   DeleteObjectCommand,
   GetObjectCommand,
   HeadObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client
-} = require('@aws-sdk/client-s3');
+} from '@aws-sdk/client-s3';
 
-const {
-  throwError
-} = require('./Errors');
+import {throwError} from './Errors.js';
 
 /**
  * Provides S3 client methods.
@@ -344,4 +338,4 @@ function isValidRegion(value) {
   return value === 'us-east-1' || list.includes(value);
 }
 
-module.exports = Client;
+export default Client;

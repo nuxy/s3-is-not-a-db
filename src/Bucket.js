@@ -1,14 +1,10 @@
-'use strict';
-
 // Local modules.
-const Actions = require('./bucket/Actions');
-const Prefix  = require('./bucket/Prefix');
-const Model   = require('./bucket/Model');
-const Utils   = require('./Utils');
+import Actions from './bucket/Actions.js';
+import Prefix  from './bucket/Prefix.js';
+import Model   from './bucket/Model.js';
 
-const {
-  throwError
-} = require('./Errors');
+import {throwError} from './Errors.js';
+import {pascalCase} from './Utils.js';
 
 /**
  * Provides bucket interface.
@@ -55,7 +51,7 @@ class Bucket {
         /* istanbul ignore next */
         (process.env.NODE_ENV === 'production') && Object.freeze(actions);
 
-        actions.name = Utils.pascalCase(actions.prefixPath);
+        actions.name = pascalCase(actions.prefixPath);
 
         // Define property (instance of Actions).
         this[actions.name] = actions;
@@ -69,4 +65,4 @@ class Bucket {
   }
 }
 
-module.exports = Bucket;
+export default Bucket;

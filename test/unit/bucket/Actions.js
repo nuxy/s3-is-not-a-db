@@ -1,19 +1,15 @@
-'use strict';
+import {use, expect}   from 'chai';
+import chaiAsPromised  from 'chai-as-promised';
+import {restore, stub} from 'sinon';
 
-const chai           = require('chai');
-const chaiAsPromised = require('chai-as-promised');
-const sinon          = require('sinon');
-
-chai.use(chaiAsPromised);
-
-const expect = chai.expect;
+use(chaiAsPromised);
 
 // Load modules.
-const Actions = require(`${PACKAGE_ROOT}/src/bucket/Actions`);
-const Client  = require(`${PACKAGE_ROOT}/src/Client`);
+const Actions = (await import(`${PACKAGE_ROOT}/src/bucket/Actions.js`)).default;
+const Client  = (await import(`${PACKAGE_ROOT}/src/Client.js`)).default;
 
 afterEach(() => {
-  sinon.restore();
+  restore();
 });
 
 describe('BucketActions', function() {
@@ -63,7 +59,7 @@ describe('BucketActions', function() {
   describe('Instance methods', function() {
     describe('list', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Client.prototype, 'list').resolves('foo');
+        stub(Client.prototype, 'list').resolves('foo');
 
         const result = actions.list();
 
@@ -73,7 +69,7 @@ describe('BucketActions', function() {
 
     describe('delete', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Client.prototype, 'delete').resolves();
+        stub(Client.prototype, 'delete').resolves();
 
         const result = actions.delete('keyName');
 
@@ -83,7 +79,7 @@ describe('BucketActions', function() {
       it('should resolve Error', function() {
         actions.lockObject('keyName');
 
-        sinon.stub(Actions.prototype, 'isLocked').resolves(true);
+        stub(Actions.prototype, 'isLocked').resolves(true);
 
         const result = actions.delete('keyName');
 
@@ -97,7 +93,7 @@ describe('BucketActions', function() {
 
         const output = Buffer.from('foo').toString('base64');
 
-        sinon.stub(Client.prototype, 'fetch').resolves({
+        stub(Client.prototype, 'fetch').resolves({
           transformToString: () => output
         });
 
@@ -111,7 +107,7 @@ describe('BucketActions', function() {
 
         const output = Buffer.from('foo');
 
-        sinon.stub(Client.prototype, 'fetch').resolves({
+        stub(Client.prototype, 'fetch').resolves({
           transformToByteArray: () => output
         });
 
@@ -125,7 +121,7 @@ describe('BucketActions', function() {
 
         const output = '{"foo":"bar"}';
 
-        sinon.stub(Client.prototype, 'fetch').resolves({
+        stub(Client.prototype, 'fetch').resolves({
           transformToString: () => output
         });
 
@@ -139,7 +135,7 @@ describe('BucketActions', function() {
 
         const output = 'foo';
 
-        sinon.stub(Client.prototype, 'fetch').resolves({
+        stub(Client.prototype, 'fetch').resolves({
           transformToString: () => output
         });
 
@@ -149,7 +145,7 @@ describe('BucketActions', function() {
       });
 
       it('should resolve Promise (undefined)', function() {
-        sinon.stub(Client.prototype, 'fetch').resolves();
+        stub(Client.prototype, 'fetch').resolves();
 
         const result = actions.fetch('keyName');
 
@@ -159,7 +155,7 @@ describe('BucketActions', function() {
       it('should resolve Error', function() {
         actions.lockObject('keyName');
 
-        sinon.stub(Actions.prototype, 'isLocked').resolves(true);
+        stub(Actions.prototype, 'isLocked').resolves(true);
 
         const result = actions.fetch('keyName');
 
@@ -169,7 +165,7 @@ describe('BucketActions', function() {
 
     describe('write', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Client.prototype, 'write').resolves();
+        stub(Client.prototype, 'write').resolves();
 
         const result1 = actions.write('keyName', 'foo');
         const result2 = actions.write('keyName', {foo1: 'bar1', foo2: 'bar2', foo3: 'bar3'});
@@ -183,7 +179,7 @@ describe('BucketActions', function() {
       it('should resolve Error (locked)', function() {
         actions.lockObject('keyName');
 
-        sinon.stub(Actions.prototype, 'isLocked').resolves(true);
+        stub(Actions.prototype, 'isLocked').resolves(true);
 
         const result = actions.write('keyName', 'foo');
 
@@ -199,7 +195,7 @@ describe('BucketActions', function() {
 
     describe('rename', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Client.prototype, 'rename').resolves();
+        stub(Client.prototype, 'rename').resolves();
 
         const result = actions.rename('keyName1', 'keyName2');
 
@@ -209,7 +205,7 @@ describe('BucketActions', function() {
       it('should resolve Error', function() {
         actions.lockObject('keyName');
 
-        sinon.stub(Actions.prototype, 'isLocked').resolves(true);
+        stub(Actions.prototype, 'isLocked').resolves(true);
 
         const result = actions.rename('keyName1', 'keyName2');
 
@@ -219,7 +215,7 @@ describe('BucketActions', function() {
 
     describe('exists', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Client.prototype, 'exists').resolves(true);
+        stub(Client.prototype, 'exists').resolves(true);
 
         const result = actions.exists('keyName');
 
@@ -245,11 +241,11 @@ describe('BucketActions', function() {
         const json1 = '{"foo1":"bar1","foo2":"bar2","foo3":"bar3"}';
         const json2 = '{"foo1":"bar1","foo2":"bar2","foo3":"bar3"}';
 
-        sinon.stub(Client.prototype, 'fetch')
+        stub(Client.prototype, 'fetch')
           .onCall(0).resolves({transformToString: () => json1})
           .onCall(1).resolves({transformToString: () => json2});
 
-        sinon.stub(Client.prototype, 'write').resolves();
+        stub(Client.prototype, 'write').resolves();
 
         actions.outputType = 'json';
 
@@ -261,7 +257,7 @@ describe('BucketActions', function() {
       });
 
       it('should resolve Error (methods)', async function() {
-        sinon.stub(actions, 'isLocked').resolves(true);
+        stub(actions, 'isLocked').resolves(true);
 
         const keyName = 'file.json';
 
@@ -274,10 +270,10 @@ describe('BucketActions', function() {
       it('should resolve Error (operations)', function() {
         const json = '{"foo":"bar"}';
 
-        sinon.stub(Client.prototype, 'fetch')
+        stub(Client.prototype, 'fetch')
           .onCall(0).resolves(json);
 
-        sinon.stub(Client.prototype, 'write').rejects();
+        stub(Client.prototype, 'write').rejects();
 
         const result = actions.batch(keyName, operations);
 
@@ -285,7 +281,7 @@ describe('BucketActions', function() {
       });
 
       it('should resolve Error (locked)', function() {
-        sinon.stub(actions, 'isLocked').resolves(true);
+        stub(actions, 'isLocked').resolves(true);
 
         const result = actions.batch(keyName, operations);
 
@@ -295,7 +291,7 @@ describe('BucketActions', function() {
 
     describe('isLocked', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Actions.prototype, 'exists')
+        stub(Actions.prototype, 'exists')
           .onCall(0).resolves(false)
           .onCall(1).resolves({})
           .onCall(2).resolves({Metadata:{ownerId: 'abcdef123456'}});
@@ -316,7 +312,7 @@ describe('BucketActions', function() {
 
     describe('lockObject', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Actions.prototype, 'exists').resolves(false);
+        stub(Actions.prototype, 'exists').resolves(false);
 
         const result = actions.lockObject('keyName');
 
@@ -324,7 +320,7 @@ describe('BucketActions', function() {
       });
 
       it('should resolve Error', function() {
-        sinon.stub(Actions.prototype, 'exists').resolves(true);
+        stub(Actions.prototype, 'exists').resolves(true);
 
         const result = actions.lockObject('keyName');
 
@@ -334,7 +330,7 @@ describe('BucketActions', function() {
 
     describe('unlockObject', function() {
       it('should resolve Promise', function() {
-        sinon.stub(Actions.prototype, 'exists').resolves(true);
+        stub(Actions.prototype, 'exists').resolves(true);
 
         const result = actions.unlockObject('keyName');
 

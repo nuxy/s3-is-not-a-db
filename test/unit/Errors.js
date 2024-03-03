@@ -1,13 +1,7 @@
-'use strict';
-
-const chai = require('chai');
-
-const expect = chai.expect;
+import {expect} from 'chai';
 
 // Load modules.
-const {
-  throwError
-} = require(`${PACKAGE_ROOT}/src/Errors`);
+const {throwError} = await import(`${PACKAGE_ROOT}/src/Errors.js`);
 
 describe('Errors', function() {
   describe('Exported functions', function() {
