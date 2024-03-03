@@ -8,7 +8,7 @@
   "scripts": {
     "gendoc": "jsdoc -d doc -r src",
     "lint": "eslint src test",
-    "test": "nyc mocha --require test/mocha.env.js 'test/**/*.js'",
+    "test": "nyc mocha --require esm --require test/mocha.env.js 'test/**/*.js'",
     "coverage": "nyc report --reporter=text-lcov > lcov.info && ./coveralls report lcov.info",
     "example-single": "node example",
     "example-parallel": "concurrently 'node example' 'node example' 'node example'"
@@ -39,6 +39,7 @@
     "chai": "^4.4.1",
     "chai-as-promised": "^7.1.1",
     "eslint": "^8.57.0",
+    "esm": "^3.2.25",
     "jsdoc": "^4.0.2",
     "mocha": "^10.4.0",
     "nyc": "^15.1.0",
