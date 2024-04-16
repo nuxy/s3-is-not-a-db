@@ -11,7 +11,7 @@
 
 const {
   BucketLocationConstraint
-} = require('@aws-sdk/client-s3/dist-cjs/models/models_0');
+} = require('@aws-sdk/client-s3/dist-cjs');
 
 const {
   DeleteObjectCommand,
