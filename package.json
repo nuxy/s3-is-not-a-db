@@ -31,15 +31,15 @@
   "author": "Marc S. Brooks <devel@mbrooks.info> (https://mbrooks.info)",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.631.0"
+    "@aws-sdk/client-s3": "^3.1009.0"
   },
   "devDependencies": {
     "aws-sdk-client-mock": "^3.1.0",
     "chai": "^4.5.0",
     "chai-as-promised": "^7.1.2",
-    "eslint": "^8.57.0",
-    "jsdoc": "^4.0.3",
-    "mocha": "^10.7.3",
+    "eslint": "^10.0.3",
+    "jsdoc": "^4.0.5",
+    "mocha": "^11.7.5",
     "nyc": "^15.1.0",
     "sinon": "^17.0.1",
     "uuid": "^9.0.1"
