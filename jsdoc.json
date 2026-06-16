@@ -21,6 +21,14 @@
     "encoding": "utf8",
     "private": true,
     "recurse": true,
-    "template": "./node_modules/minami"
+    "template": "./node_modules/clean-jsdoc-theme"
+  },
+  "theme_opts": {
+    "homepageTitle": "S3 is NOT a DB | Simple interface to using Amazon S3 as a database",
+    "includeFilesListInHomepage": true
+  },
+  "markdown": {
+    "hardwrap": false,
+    "idInHeadings": true
   }
 }

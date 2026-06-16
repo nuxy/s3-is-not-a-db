@@ -5,7 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "gendoc": "jsdoc -d doc -r src",
+    "gendoc": "jsdoc -c jsdoc.json",
     "lint": "eslint src test",
     "test": "nyc mocha --require test/mocha.env.js 'test/**/*.js'",
     "coverage": "nyc report --reporter=text-lcov > lcov.info && ./coveralls report lcov.info",
@@ -37,6 +37,7 @@
     "aws-sdk-client-mock": "^3.1.0",
     "chai": "^4.5.0",
     "chai-as-promised": "^7.1.2",
+    "clean-jsdoc-theme": "^4.3.0",
     "eslint": "^10.5.0",
     "jsdoc": "^4.0.5",
     "mocha": "^11.3.0",
